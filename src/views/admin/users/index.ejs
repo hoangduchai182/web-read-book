@@ -1,0 +1,87 @@
+<%- include('../../partials/header') %>
+
+<% const active = 'users'; %>
+<div class="flex">
+    <%- include('../partials/sidebar') %>
+
+    <main class="ml-64 flex-1 p-8 min-h-screen">
+        <div class="flex items-center justify-between mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-800">Quản lý người dùng</h1>
+                <p class="text-gray-500 mt-1">Danh sách tất cả người dùng trong hệ thống</p>
+            </div>
+            <a href="/admin/users/add" class="btn-primary">
+                <i class="fas fa-user-plus mr-2"></i> Thêm người dùng
+            </a>
+        </div>
+
+        <%- include('../../partials/flash') %>
+
+        <div class="card overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50 border-b">
+                        <tr>
+                            <th class="text-left px-6 py-4 text-sm font-semibold text-gray-600">ID</th>
+                            <th class="text-left px-6 py-4 text-sm font-semibold text-gray-600">Họ tên</th>
+                            <th class="text-left px-6 py-4 text-sm font-semibold text-gray-600">Username</th>
+                            <th class="text-left px-6 py-4 text-sm font-semibold text-gray-600">Email</th>
+                            <th class="text-left px-6 py-4 text-sm font-semibold text-gray-600">Vai trò</th>
+                            <th class="text-left px-6 py-4 text-sm font-semibold text-gray-600">Ngày tạo</th>
+                            <th class="text-left px-6 py-4 text-sm font-semibold text-gray-600">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y">
+                        <% if (users.length > 0) { %>
+                            <% users.forEach(function(u) { %>
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="px-6 py-4 text-sm text-gray-500">#<%= u.id %></td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-9 h-9 rounded-full flex items-center justify-center
+                                                <%= u.role === 'admin' ? 'bg-red-100' : 'bg-primary-100' %>">
+                                                <i class="fas fa-user
+                                                    <%= u.role === 'admin' ? 'text-red-600' : 'text-primary-600' %> text-sm"></i>
+                                            </div>
+                                            <span class="font-medium text-sm text-gray-800"><%= u.full_name %></span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-600"><%= u.username %></td>
+                                    <td class="px-6 py-4 text-sm text-gray-600"><%= u.email %></td>
+                                    <td class="px-6 py-4">
+                                        <span class="text-xs font-bold px-2.5 py-1 rounded-full
+                                            <%= u.role === 'admin' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700' %>">
+                                            <%= u.role === 'admin' ? 'Admin' : 'User' %>
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-500"><%= new Date(u.created_at).toLocaleDateString('vi-VN') %></td>
+                                    <td class="px-6 py-4">
+                                        <% if (u.id !== user.id) { %>
+                                            <form action="/admin/users/delete/<%= u.id %>" method="POST" class="inline"
+                                                  onsubmit="return confirm('Bạn có chắc muốn xóa người dùng này?')">
+                                                <button type="submit" class="text-red-600 hover:text-red-700 p-1" title="Xóa">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        <% } else { %>
+                                            <span class="text-gray-400 text-xs">Bạn</span>
+                                        <% } %>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="7" class="px-6 py-12 text-center text-gray-400">
+                                    <i class="fas fa-inbox text-4xl mb-3"></i>
+                                    <p>Chưa có người dùng nào</p>
+                                </td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>
+
+<%- include('../../partials/footer') %>

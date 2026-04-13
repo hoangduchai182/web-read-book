@@ -1,0 +1,106 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<div class="max-w-7xl mx-auto px-4 py-8">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+        <h1 class="text-3xl font-bold text-gray-800">
+            <i class="fas fa-book mr-2 text-primary-600"></i> Thư viện sách
+        </h1>
+    </div>
+
+    <%- include('../partials/flash') %>
+
+    <!-- Bộ lọc & Tìm kiếm -->
+    <div class="card p-4 mb-8">
+        <form action="/books" method="GET" class="flex flex-col sm:flex-row gap-4">
+            <div class="flex-1">
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+                        <i class="fas fa-search"></i>
+                    </span>
+                    <input type="text" name="search" value="<%= search %>" class="input-field pl-10" placeholder="Tìm theo tên sách hoặc tác giả...">
+                </div>
+            </div>
+            <div class="sm:w-48">
+                <select name="category" class="input-field">
+                    <option value="">Tất cả thể loại</option>
+                    <% categories.forEach(function(cat) { %>
+                        <option value="<%= cat.id %>" <%= categoryId == cat.id ? 'selected' : '' %>><%= cat.name %></option>
+                    <% }); %>
+                </select>
+            </div>
+            <button type="submit" class="btn-primary">
+                <i class="fas fa-search mr-1"></i> Tìm kiếm
+            </button>
+        </form>
+    </div>
+
+    <!-- Danh sách sách -->
+    <% if (books.length > 0) { %>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+            <% books.forEach(function(book) { %>
+                <a href="/books/<%= book.id %>" class="card group cursor-pointer">
+                    <div class="aspect-[3/4] bg-gray-200 relative overflow-hidden">
+                        <% if (book.cover_image) { %>
+                            <img src="<%= book.cover_image %>" alt="<%= book.title %>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        <% } else { %>
+                            <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary-400 to-primary-600">
+                                <i class="fas fa-book text-white text-4xl"></i>
+                            </div>
+                        <% } %>
+                        <div class="absolute top-2 right-2">
+                            <span class="bg-white/90 text-xs font-bold px-2 py-1 rounded uppercase
+                                <%= book.file_type === 'pdf' ? 'text-red-600' : 'text-green-600' %>">
+                                <%= book.file_type %>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-semibold text-sm text-gray-800 truncate" title="<%= book.title %>"><%= book.title %></h3>
+                        <p class="text-xs text-gray-500 truncate mt-1"><%= book.author %></p>
+                        <% if (book.category_name) { %>
+                            <span class="inline-block bg-primary-50 text-primary-700 text-xs px-2 py-0.5 rounded mt-2"><%= book.category_name %></span>
+                        <% } %>
+                    </div>
+                </a>
+            <% }); %>
+        </div>
+
+        <!-- Phân trang -->
+        <% if (totalPages > 1) { %>
+            <div class="flex justify-center mt-10">
+                <nav class="flex items-center gap-2">
+                    <% if (currentPage > 1) { %>
+                        <a href="/books?page=<%= currentPage - 1 %>&search=<%= search %>&category=<%= categoryId %>"
+                           class="px-4 py-2 border rounded-lg text-gray-600 hover:bg-gray-100 transition-colors">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                    <% } %>
+
+                    <% for (let i = 1; i <= totalPages; i++) { %>
+                        <a href="/books?page=<%= i %>&search=<%= search %>&category=<%= categoryId %>"
+                           class="px-4 py-2 border rounded-lg transition-colors
+                           <%= i === currentPage ? 'bg-primary-600 text-white border-primary-600' : 'text-gray-600 hover:bg-gray-100' %>">
+                            <%= i %>
+                        </a>
+                    <% } %>
+
+                    <% if (currentPage < totalPages) { %>
+                        <a href="/books?page=<%= currentPage + 1 %>&search=<%= search %>&category=<%= categoryId %>"
+                           class="px-4 py-2 border rounded-lg text-gray-600 hover:bg-gray-100 transition-colors">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    <% } %>
+                </nav>
+            </div>
+        <% } %>
+    <% } else { %>
+        <div class="text-center py-16">
+            <i class="fas fa-book-open text-gray-300 text-6xl mb-4"></i>
+            <h3 class="text-xl text-gray-500">Không tìm thấy sách nào</h3>
+            <p class="text-gray-400 mt-2">Hãy thử tìm kiếm với từ khóa khác</p>
+        </div>
+    <% } %>
+</div>
+
+<%- include('../partials/footer') %>

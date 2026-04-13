@@ -1,0 +1,73 @@
+<nav class="bg-white shadow-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+            <!-- Logo -->
+            <div class="flex items-center">
+                <a href="/" class="flex items-center gap-2">
+                    <i class="fas fa-book-open text-primary-600 text-2xl"></i>
+                    <span class="text-xl font-bold text-gray-800">BookRead</span>
+                </a>
+            </div>
+
+            <!-- Navigation Links -->
+            <div class="hidden md:flex items-center space-x-4">
+                <a href="/" class="text-gray-600 hover:text-primary-600 px-3 py-2 rounded-lg transition-colors">
+                    <i class="fas fa-home mr-1"></i> Trang chủ
+                </a>
+                <% if (typeof user !== 'undefined' && user) { %>
+                    <a href="/books" class="text-gray-600 hover:text-primary-600 px-3 py-2 rounded-lg transition-colors">
+                        <i class="fas fa-book mr-1"></i> Thư viện
+                    </a>
+                    <% if (user.role === 'admin') { %>
+                        <a href="/admin" class="text-gray-600 hover:text-primary-600 px-3 py-2 rounded-lg transition-colors">
+                            <i class="fas fa-cog mr-1"></i> Quản trị
+                        </a>
+                    <% } %>
+                    <div class="relative ml-4 flex items-center gap-3">
+                        <span class="text-gray-700 font-medium"><%= user.full_name %></span>
+                        <a href="/auth/logout" class="btn-danger text-sm py-1.5 px-3">
+                            <i class="fas fa-sign-out-alt mr-1"></i> Đăng xuất
+                        </a>
+                    </div>
+                <% } else { %>
+                    <a href="/auth/login" class="btn-primary text-sm py-1.5 px-4">
+                        <i class="fas fa-sign-in-alt mr-1"></i> Đăng nhập
+                    </a>
+                    <a href="/auth/register" class="btn-secondary text-sm py-1.5 px-4">
+                        <i class="fas fa-user-plus mr-1"></i> Đăng ký
+                    </a>
+                <% } %>
+            </div>
+
+            <!-- Mobile menu button -->
+            <div class="md:hidden flex items-center">
+                <button id="mobile-menu-btn" class="text-gray-600 hover:text-primary-600 text-2xl">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+        <div class="px-4 py-3 space-y-2">
+            <a href="/" class="block text-gray-600 hover:text-primary-600 py-2">Trang chủ</a>
+            <% if (typeof user !== 'undefined' && user) { %>
+                <a href="/books" class="block text-gray-600 hover:text-primary-600 py-2">Thư viện</a>
+                <% if (user.role === 'admin') { %>
+                    <a href="/admin" class="block text-gray-600 hover:text-primary-600 py-2">Quản trị</a>
+                <% } %>
+                <a href="/auth/logout" class="block text-red-600 hover:text-red-700 py-2">Đăng xuất</a>
+            <% } else { %>
+                <a href="/auth/login" class="block text-primary-600 py-2">Đăng nhập</a>
+                <a href="/auth/register" class="block text-gray-600 py-2">Đăng ký</a>
+            <% } %>
+        </div>
+    </div>
+</nav>
+
+<script>
+    document.getElementById('mobile-menu-btn')?.addEventListener('click', () => {
+        document.getElementById('mobile-menu')?.classList.toggle('hidden');
+    });
+</script>

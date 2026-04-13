@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đọc: <%= book.title %></title>
+    <link rel="stylesheet" href="/css/output.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/epubjs/dist/epub.min.js"></script>
+    <style>
+        body { margin: 0; background: #faf9f6; overflow: hidden; }
+        #epub-viewer { height: calc(100vh - 56px); position: relative; }
+        #epub-area { height: 100%; }
+        .toolbar { height: 56px; }
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+            width: 40px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.1);
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+            border-radius: 4px;
+        }
+        .nav-btn:hover { background: rgba(0,0,0,0.2); }
+        #btn-prev { left: 10px; }
+        #btn-next { right: 10px; }
+
+        /* TOC Sidebar */
+        #toc-sidebar {
+            position: fixed;
+            top: 56px;
+            left: -350px;
+            width: 350px;
+            height: calc(100vh - 56px);
+            background: white;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            transition: left 0.3s ease;
+            z-index: 20;
+            overflow-y: auto;
+        }
+        #toc-sidebar.open { left: 0; }
+        #toc-overlay {
+            position: fixed;
+            top: 56px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.3);
+            z-index: 15;
+            display: none;
+        }
+        #toc-overlay.open { display: block; }
+    </style>
+</head>
+<body>
+    <!-- Toolbar -->
+    <div class="toolbar bg-gray-900 text-white flex items-center justify-between px-4 shadow-lg">
+        <div class="flex items-center gap-4">
+            <a href="/books/<%= book.id %>" class="text-gray-300 hover:text-white transition-colors">
+                <i class="fas fa-arrow-left text-lg"></i>
+            </a>
+            <button id="toc-toggle" class="text-gray-300 hover:text-white transition-colors" title="Mục lục">
+                <i class="fas fa-list text-lg"></i>
+            </button>
+            <h1 class="text-sm sm:text-base font-medium truncate max-w-[200px] sm:max-w-md"><%= book.title %></h1>
+        </div>
+
+        <div class="flex items-center gap-2 sm:gap-3">
+            <!-- Font size -->
+            <button id="font-decrease" class="p-2 hover:bg-gray-700 rounded transition-colors" title="Giảm cỡ chữ">
+                <i class="fas fa-minus"></i>
+            </button>
+            <span id="font-size-display" class="text-sm min-w-[40px] text-center">100%</span>
+            <button id="font-increase" class="p-2 hover:bg-gray-700 rounded transition-colors" title="Tăng cỡ chữ">
+                <i class="fas fa-plus"></i>
+            </button>
+
+            <div class="w-px h-6 bg-gray-600 mx-1"></div>
+
+            <!-- Theme -->
+            <button id="theme-light" class="w-7 h-7 rounded-full bg-white border-2 border-gray-400 hover:border-primary-400" title="Sáng"></button>
+            <button id="theme-sepia" class="w-7 h-7 rounded-full bg-amber-100 border-2 border-gray-400 hover:border-primary-400" title="Sepia"></button>
+            <button id="theme-dark" class="w-7 h-7 rounded-full bg-gray-800 border-2 border-gray-400 hover:border-primary-400" title="Tối"></button>
+        </div>
+    </div>
+
+    <!-- TOC Sidebar -->
+    <div id="toc-overlay"></div>
+    <div id="toc-sidebar">
+        <div class="p-4 border-b bg-gray-50">
+            <h2 class="font-bold text-lg text-gray-800"><i class="fas fa-list mr-2"></i>Mục lục</h2>
+        </div>
+        <div id="toc-content" class="p-4"></div>
+    </div>
+
+    <!-- EPUB Viewer -->
+    <div id="epub-viewer">
+        <button id="btn-prev" class="nav-btn">
+            <i class="fas fa-chevron-left text-gray-600"></i>
+        </button>
+        <div id="epub-area"></div>
+        <button id="btn-next" class="nav-btn">
+            <i class="fas fa-chevron-right text-gray-600"></i>
+        </button>
+    </div>
+
+    <script>
+        const bookId = '<%= book.id %>';
+        const filePath = '<%= book.file_path %>';
+        const savedLocation = '<%= progress ? progress.current_location || "" : "" %>';
+
+        let currentFontSize = 100;
+        let book, rendition;
+
+        // Khởi tạo EPUB
+        async function initEpub() {
+            try {
+                book = ePub(filePath);
+                rendition = book.renderTo('epub-area', {
+                    width: '100%',
+                    height: '100%',
+                    spread: 'none'
+                });
+
+                // Hiển thị từ vị trí đã lưu hoặc từ đầu
+                if (savedLocation) {
+                    rendition.display(savedLocation);
+                } else {
+                    rendition.display();
+                }
+
+                // Tải mục lục
+                const navigation = await book.loaded.navigation;
+                renderTOC(navigation.toc);
+
+                // Lưu tiến trình khi chuyển trang
+                rendition.on('relocated', (location) => {
+                    saveProgress(location.start.cfi);
+                });
+
+            } catch (error) {
+                console.error('Error loading EPUB:', error);
+                alert('Không thể tải file EPUB. Vui lòng thử lại.');
+            }
+        }
+
+        // Render mục lục
+        function renderTOC(toc) {
+            const tocContent = document.getElementById('toc-content');
+            const ul = document.createElement('ul');
+            ul.className = 'space-y-1';
+
+            toc.forEach(chapter => {
+                const li = document.createElement('li');
+                const link = document.createElement('a');
+                link.textContent = chapter.label.trim();
+                link.href = '#';
+                link.className = 'block px-3 py-2 text-gray-700 hover:bg-primary-50 hover:text-primary-600 rounded-lg transition-colors text-sm';
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    rendition.display(chapter.href);
+                    closeTOC();
+                });
+                li.appendChild(link);
+
+                // Sub items
+                if (chapter.subitems && chapter.subitems.length > 0) {
+                    const subUl = document.createElement('ul');
+                    subUl.className = 'ml-4 space-y-1 mt-1';
+                    chapter.subitems.forEach(sub => {
+                        const subLi = document.createElement('li');
+                        const subLink = document.createElement('a');
+                        subLink.textContent = sub.label.trim();
+                        subLink.href = '#';
+                        subLink.className = 'block px-3 py-1.5 text-gray-500 hover:bg-primary-50 hover:text-primary-600 rounded transition-colors text-xs';
+                        subLink.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            rendition.display(sub.href);
+                            closeTOC();
+                        });
+                        subLi.appendChild(subLink);
+                        subUl.appendChild(subLi);
+                    });
+                    li.appendChild(subUl);
+                }
+
+                ul.appendChild(li);
+            });
+
+            tocContent.appendChild(ul);
+        }
+
+        // Lưu tiến trình
+        async function saveProgress(cfi) {
+            try {
+                await fetch(`/books/${bookId}/progress`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ current_location: cfi, current_page: 0 })
+                });
+            } catch (error) {
+                console.error('Error saving progress:', error);
+            }
+        }
+
+        // TOC toggle
+        function openTOC() {
+            document.getElementById('toc-sidebar').classList.add('open');
+            document.getElementById('toc-overlay').classList.add('open');
+        }
+        function closeTOC() {
+            document.getElementById('toc-sidebar').classList.remove('open');
+            document.getElementById('toc-overlay').classList.remove('open');
+        }
+
+        document.getElementById('toc-toggle').addEventListener('click', () => {
+            const sidebar = document.getElementById('toc-sidebar');
+            sidebar.classList.contains('open') ? closeTOC() : openTOC();
+        });
+        document.getElementById('toc-overlay').addEventListener('click', closeTOC);
+
+        // Navigation
+        document.getElementById('btn-prev').addEventListener('click', () => rendition.prev());
+        document.getElementById('btn-next').addEventListener('click', () => rendition.next());
+
+        // Font size
+        document.getElementById('font-decrease').addEventListener('click', () => {
+            currentFontSize = Math.max(currentFontSize - 10, 60);
+            rendition.themes.fontSize(`${currentFontSize}%`);
+            document.getElementById('font-size-display').textContent = `${currentFontSize}%`;
+        });
+
+        document.getElementById('font-increase').addEventListener('click', () => {
+            currentFontSize = Math.min(currentFontSize + 10, 200);
+            rendition.themes.fontSize(`${currentFontSize}%`);
+            document.getElementById('font-size-display').textContent = `${currentFontSize}%`;
+        });
+
+        // Themes
+        const themes = {
+            light: { body: { background: '#ffffff', color: '#333333' } },
+            sepia: { body: { background: '#f4ecd8', color: '#5b4636' } },
+            dark: { body: { background: '#1a1a2e', color: '#cccccc' } }
+        };
+
+        function applyTheme(name) {
+            rendition.themes.register(name, themes[name]);
+            rendition.themes.select(name);
+            const bg = themes[name].body.background;
+            document.getElementById('epub-viewer').style.background = bg;
+            document.body.style.background = bg;
+        }
+
+        document.getElementById('theme-light').addEventListener('click', () => applyTheme('light'));
+        document.getElementById('theme-sepia').addEventListener('click', () => applyTheme('sepia'));
+        document.getElementById('theme-dark').addEventListener('click', () => applyTheme('dark'));
+
+        // Keyboard
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') rendition.prev();
+            if (e.key === 'ArrowRight') rendition.next();
+        });
+
+        initEpub();
+    </script>
+</body>
+</html>

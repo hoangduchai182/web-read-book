@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đọc: <%= book.title %></title>
+    <link rel="stylesheet" href="/css/output.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <style>
+        body { margin: 0; background: #1a1a2e; overflow: hidden; }
+        #pdf-container { height: calc(100vh - 56px); overflow-y: auto; display: flex; justify-content: center; background: #2d2d44; }
+        #pdf-canvas { max-width: 100%; }
+        .toolbar { height: 56px; }
+    </style>
+</head>
+<body>
+    <!-- Toolbar -->
+    <div class="toolbar bg-gray-900 text-white flex items-center justify-between px-4 shadow-lg">
+        <div class="flex items-center gap-4">
+            <a href="/books/<%= book.id %>" class="text-gray-300 hover:text-white transition-colors">
+                <i class="fas fa-arrow-left text-lg"></i>
+            </a>
+            <h1 class="text-sm sm:text-base font-medium truncate max-w-[200px] sm:max-w-md"><%= book.title %></h1>
+        </div>
+
+        <div class="flex items-center gap-2 sm:gap-3">
+            <!-- Điều hướng trang -->
+            <button id="prev-page" class="p-2 hover:bg-gray-700 rounded transition-colors" title="Trang trước">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <span class="text-sm">
+                <input type="number" id="current-page" class="w-12 bg-gray-700 text-center text-white rounded px-1 py-1 text-sm" value="1" min="1">
+                / <span id="total-pages">0</span>
+            </span>
+            <button id="next-page" class="p-2 hover:bg-gray-700 rounded transition-colors" title="Trang sau">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+
+            <div class="w-px h-6 bg-gray-600 mx-1"></div>
+
+            <!-- Zoom -->
+            <button id="zoom-out" class="p-2 hover:bg-gray-700 rounded transition-colors" title="Thu nhỏ">
+                <i class="fas fa-search-minus"></i>
+            </button>
+            <span id="zoom-level" class="text-sm min-w-[40px] text-center">100%</span>
+            <button id="zoom-in" class="p-2 hover:bg-gray-700 rounded transition-colors" title="Phóng to">
+                <i class="fas fa-search-plus"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- PDF Viewer -->
+    <div id="pdf-container">
+        <canvas id="pdf-canvas"></canvas>
+    </div>
+
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+        const bookId = '<%= book.id %>';
+        const filePath = '<%= book.file_path %>';
+        const savedPage = <%= progress ? progress.current_page : 0 %>;
+
+        let pdfDoc = null;
+        let currentPage = savedPage > 0 ? savedPage : 1;
+        let scale = 1.5;
+        const canvas = document.getElementById('pdf-canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Tải PDF
+        async function loadPDF() {
+            try {
+                pdfDoc = await pdfjsLib.getDocument(filePath).promise;
+                document.getElementById('total-pages').textContent = pdfDoc.numPages;
+                document.getElementById('current-page').max = pdfDoc.numPages;
+                renderPage(currentPage);
+            } catch (error) {
+                console.error('Error loading PDF:', error);
+                alert('Không thể tải file PDF. Vui lòng thử lại.');
+            }
+        }
+
+        // Render trang
+        async function renderPage(num) {
+            try {
+                const page = await pdfDoc.getPage(num);
+                const viewport = page.getViewport({ scale });
+
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                await page.render({ canvasContext: ctx, viewport }).promise;
+
+                currentPage = num;
+                document.getElementById('current-page').value = num;
+                updateZoomLevel();
+                saveProgress();
+            } catch (error) {
+                console.error('Error rendering page:', error);
+            }
+        }
+
+        // Lưu tiến trình
+        async function saveProgress() {
+            try {
+                await fetch(`/books/${bookId}/progress`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ current_page: currentPage })
+                });
+            } catch (error) {
+                console.error('Error saving progress:', error);
+            }
+        }
+
+        function updateZoomLevel() {
+            document.getElementById('zoom-level').textContent = Math.round(scale * 100 / 1.5) + '%';
+        }
+
+        // Event listeners
+        document.getElementById('prev-page').addEventListener('click', () => {
+            if (currentPage > 1) renderPage(currentPage - 1);
+        });
+
+        document.getElementById('next-page').addEventListener('click', () => {
+            if (currentPage < pdfDoc.numPages) renderPage(currentPage + 1);
+        });
+
+        document.getElementById('current-page').addEventListener('change', (e) => {
+            const page = parseInt(e.target.value);
+            if (page >= 1 && page <= pdfDoc.numPages) renderPage(page);
+        });
+
+        document.getElementById('zoom-in').addEventListener('click', () => {
+            scale = Math.min(scale + 0.25, 4);
+            renderPage(currentPage);
+        });
+
+        document.getElementById('zoom-out').addEventListener('click', () => {
+            scale = Math.max(scale - 0.25, 0.5);
+            renderPage(currentPage);
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            switch(e.key) {
+                case 'ArrowLeft':
+                case 'ArrowUp':
+                    e.preventDefault();
+                    if (currentPage > 1) renderPage(currentPage - 1);
+                    break;
+                case 'ArrowRight':
+                case 'ArrowDown':
+                    e.preventDefault();
+                    if (currentPage < pdfDoc.numPages) renderPage(currentPage + 1);
+                    break;
+                case '+':
+                case '=':
+                    scale = Math.min(scale + 0.25, 4);
+                    renderPage(currentPage);
+                    break;
+                case '-':
+                    scale = Math.max(scale - 0.25, 0.5);
+                    renderPage(currentPage);
+                    break;
+            }
+        });
+
+        loadPDF();
+    </script>
+</body>
+</html>
