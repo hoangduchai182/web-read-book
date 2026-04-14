@@ -55,17 +55,22 @@
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 text-sm text-gray-500"><%= new Date(u.created_at).toLocaleDateString('vi-VN') %></td>
-                                    <td class="px-6 py-4">
-                                        <% if (u.id !== user.id) { %>
-                                            <form action="/admin/users/delete/<%= u.id %>" method="POST" class="inline"
-                                                  onsubmit="return confirm('Bạn có chắc muốn xóa người dùng này?')">
-                                                <button type="submit" class="text-red-600 hover:text-red-700 p-1" title="Xóa">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </form>
-                                        <% } else { %>
-                                            <span class="text-gray-400 text-xs">Bạn</span>
-                                        <% } %>
+                                                                        <td class="px-6 py-4">
+                                        <div class="flex items-center gap-2">
+                                            <a href="/admin/users/edit/<%= u.id %>" class="text-yellow-500 hover:text-yellow-600 p-1" title="Sửa">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <% if (u.id !== user.id) { %>
+                                                <form action="/admin/users/delete/<%= u.id %>" method="POST" class="inline"
+                                                      onsubmit="return confirm('Bạn có chắc muốn xóa người dùng này?')">
+                                                    <button type="submit" class="text-red-600 hover:text-red-700 p-1" title="Xóa">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            <% } else { %>
+                                                <span class="text-gray-400 text-xs italic">(Bạn)</span>
+                                            <% } %>
+                                        </div>
                                     </td>
                                 </tr>
                             <% }); %>

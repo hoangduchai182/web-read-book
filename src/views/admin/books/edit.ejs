@@ -1,0 +1,134 @@
+<%- include('../../partials/header') %>
+
+<% const active = 'books'; %>
+<div class="flex">
+    <%- include('../partials/sidebar') %>
+
+    <main class="ml-64 flex-1 p-8 min-h-screen">
+        <div class="mb-8">
+            <a href="/admin/books" class="text-primary-600 hover:text-primary-700 mb-2 inline-block">
+                <i class="fas fa-arrow-left mr-1"></i> Quay lại danh sách
+            </a>
+            <h1 class="text-3xl font-bold text-gray-800">Chỉnh sửa sách</h1>
+            <p class="text-gray-500 mt-1">Cập nhật thông tin sách #<%= book.id %></p>
+        </div>
+
+        <%- include('../../partials/flash') %>
+
+        <div class="card p-8 max-w-2xl">
+            <form action="/admin/books/edit/<%= book.id %>" method="POST" enctype="multipart/form-data" class="space-y-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        Tên sách <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" name="title" class="input-field" placeholder="Nhập tên sách" value="<%= book.title %>" required>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        Tác giả <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" name="author" class="input-field" placeholder="Nhập tên tác giả" value="<%= book.author %>" required>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Thể loại</label>
+                    <select name="category_id" class="input-field">
+                        <option value="">-- Chọn thể loại --</option>
+                        <% categories.forEach(function(cat) { %>
+                            <option value="<%= cat.id %>" <%= book.category_id == cat.id ? 'selected' : '' %>><%= cat.name %></option>
+                        <% }); %>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Mô tả</label>
+                    <textarea name="description" rows="4" class="input-field" placeholder="Nhập mô tả sách..."><%= book.description || '' %></textarea>
+                </div>
+
+                <!-- File sách hiện tại -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">File sách hiện tại</label>
+                    <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border">
+                        <div class="w-10 h-10 rounded-lg flex items-center justify-center
+                            <%= book.file_type === 'pdf' ? 'bg-red-100' : 'bg-green-100' %>">
+                            <i class="fas <%= book.file_type === 'pdf' ? 'fa-file-pdf text-red-600' : 'fa-book text-green-600' %>"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-700"><%= book.file_path.split('/').pop() %></p>
+                            <p class="text-xs text-gray-400 uppercase"><%= book.file_type %></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        Thay đổi file sách (PDF/EPUB)
+                    </label>
+                    <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-primary-400 transition-colors" id="book-drop-zone">
+                        <input type="file" name="book_file" id="book-file-input" accept=".pdf,.epub" class="hidden">
+                        <label for="book-file-input" class="cursor-pointer">
+                            <i class="fas fa-cloud-upload-alt text-gray-400 text-3xl mb-2"></i>
+                            <p class="text-gray-600">Nhấn để chọn file mới (bỏ trống nếu không thay đổi)</p>
+                            <p class="text-gray-400 text-sm mt-1">Hỗ trợ PDF, EPUB (tối đa 50MB)</p>
+                        </label>
+                        <p id="book-file-name" class="text-primary-600 font-medium mt-2 hidden"></p>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Ảnh bìa</label>
+                    <div class="flex items-start gap-4">
+                        <div class="w-24 h-32 bg-gray-200 rounded-lg overflow-hidden flex items-center justify-center" id="cover-preview">
+                            <% if (book.cover_image) { %>
+                                <img src="<%= book.cover_image %>" class="w-full h-full object-cover">
+                            <% } else { %>
+                                <i class="fas fa-image text-gray-400 text-2xl"></i>
+                            <% } %>
+                        </div>
+                        <div class="flex-1">
+                            <input type="file" name="cover_image" id="cover-file-input" accept=".jpg,.jpeg,.png,.webp" class="input-field">
+                            <p class="text-gray-400 text-sm mt-1">JPG, PNG, WEBP (tối đa 5MB). Bỏ trống nếu không thay đổi.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex gap-4 pt-4">
+                    <button type="submit" class="btn-primary py-3 px-8">
+                        <i class="fas fa-save mr-2"></i> Lưu thay đổi
+                    </button>
+                    <a href="/admin/books" class="btn-secondary py-3 px-8">
+                        Hủy bỏ
+                    </a>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+
+<script>
+    // Hiển thị tên file sách đã chọn
+    document.getElementById('book-file-input').addEventListener('change', function(e) {
+        const fileName = e.target.files[0]?.name;
+        if (fileName) {
+            const el = document.getElementById('book-file-name');
+            el.textContent = fileName;
+            el.classList.remove('hidden');
+        }
+    });
+
+    // Preview ảnh bìa
+    document.getElementById('cover-file-input').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                const preview = document.getElementById('cover-preview');
+                preview.innerHTML = `<img src="${ev.target.result}" class="w-full h-full object-cover">`;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
+
+<%- include('../../partials/footer') %>

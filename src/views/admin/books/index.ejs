@@ -61,8 +61,11 @@
                                     <td class="px-6 py-4 text-sm text-gray-500"><%= new Date(book.created_at).toLocaleDateString('vi-VN') %></td>
                                     <td class="px-6 py-4">
                                         <div class="flex items-center gap-2">
-                                            <a href="/books/<%= book.id %>" target="_blank" class="text-primary-600 hover:text-primary-700 p-1" title="Xem">
+                                                                                        <a href="/books/<%= book.id %>" target="_blank" class="text-primary-600 hover:text-primary-700 p-1" title="Xem">
                                                 <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a href="/admin/books/edit/<%= book.id %>" class="text-yellow-500 hover:text-yellow-600 p-1" title="Sửa">
+                                                <i class="fas fa-edit"></i>
                                             </a>
                                             <form action="/admin/books/delete/<%= book.id %>" method="POST" class="inline"
                                                   onsubmit="return confirm('Bạn có chắc muốn xóa sách này?')">
