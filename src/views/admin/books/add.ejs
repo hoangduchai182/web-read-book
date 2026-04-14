@@ -4,34 +4,34 @@
 <div class="flex">
     <%- include('../partials/sidebar') %>
 
-    <main class="ml-64 flex-1 p-8 min-h-screen">
-        <div class="mb-8">
-            <a href="/admin/books" class="text-primary-600 hover:text-primary-700 mb-2 inline-block">
-                <i class="fas fa-arrow-left mr-1"></i> Quay lại danh sách
+    <main class="ml-64 flex-1 p-8 min-h-screen bg-surface">
+        <div class="mb-10">
+            <a href="/admin/books" class="inline-flex items-center gap-2 text-sm font-semibold text-primary-600 hover:text-primary-700 hover:gap-3 transition-all duration-300 mb-4">
+                <i class="fas fa-arrow-left"></i> Quay lại danh sách
             </a>
-            <h1 class="text-3xl font-bold text-gray-800">Thêm sách mới</h1>
+            <h1 class="text-3xl font-extrabold font-headline text-gray-800">Thêm sách mới</h1>
         </div>
 
         <%- include('../../partials/flash') %>
 
-        <div class="card p-8 max-w-2xl">
+        <div class="bg-white rounded-2xl shadow-soft border border-gray-100/50 p-8 sm:p-10 max-w-2xl">
             <form action="/admin/books/add" method="POST" enctype="multipart/form-data" class="space-y-6">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                    <label class="block text-sm font-semibold text-gray-600 mb-2">
                         Tên sách <span class="text-red-500">*</span>
                     </label>
                     <input type="text" name="title" class="input-field" placeholder="Nhập tên sách" required>
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                    <label class="block text-sm font-semibold text-gray-600 mb-2">
                         Tác giả <span class="text-red-500">*</span>
                     </label>
                     <input type="text" name="author" class="input-field" placeholder="Nhập tên tác giả" required>
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Thể loại</label>
+                    <label class="block text-sm font-semibold text-gray-600 mb-2">Thể loại</label>
                     <select name="category_id" class="input-field">
                         <option value="">-- Chọn thể loại --</option>
                         <% categories.forEach(function(cat) { %>
@@ -41,43 +41,45 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Mô tả</label>
+                    <label class="block text-sm font-semibold text-gray-600 mb-2">Mô tả</label>
                     <textarea name="description" rows="4" class="input-field" placeholder="Nhập mô tả sách..."></textarea>
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                    <label class="block text-sm font-semibold text-gray-600 mb-2">
                         File sách (PDF/EPUB) <span class="text-red-500">*</span>
                     </label>
-                    <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-primary-400 transition-colors" id="book-drop-zone">
+                    <div class="border-2 border-dashed border-gray-200 rounded-2xl p-8 text-center hover:border-primary-400 hover:bg-primary-50/30 transition-all duration-300" id="book-drop-zone">
                         <input type="file" name="book_file" id="book-file-input" accept=".pdf,.epub" class="hidden" required>
                         <label for="book-file-input" class="cursor-pointer">
-                            <i class="fas fa-cloud-upload-alt text-gray-400 text-3xl mb-2"></i>
-                            <p class="text-gray-600">Nhấn để chọn hoặc kéo thả file vào đây</p>
-                            <p class="text-gray-400 text-sm mt-1">Hỗ trợ PDF, EPUB (tối đa 50MB)</p>
+                            <div class="w-14 h-14 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-cloud-upload-alt text-gray-400 text-xl"></i>
+                            </div>
+                            <p class="text-sm font-semibold text-gray-600">Nhấn để chọn hoặc kéo thả file vào đây</p>
+                            <p class="text-gray-400 text-xs mt-2">Hỗ trợ PDF, EPUB (tối đa 50MB)</p>
                         </label>
-                        <p id="book-file-name" class="text-primary-600 font-medium mt-2 hidden"></p>
+                        <p id="book-file-name" class="text-primary-600 font-semibold text-sm mt-3 hidden"></p>
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Ảnh bìa</label>
-                    <div class="flex items-start gap-4">
-                        <div class="w-24 h-32 bg-gray-200 rounded-lg overflow-hidden flex items-center justify-center" id="cover-preview">
-                            <i class="fas fa-image text-gray-400 text-2xl"></i>
+                    <label class="block text-sm font-semibold text-gray-600 mb-2">Ảnh bìa</label>
+                    <div class="flex items-start gap-5">
+                        <div class="w-24 h-32 bg-gray-100 rounded-2xl overflow-hidden flex items-center justify-center shadow-soft" id="cover-preview">
+                            <i class="fas fa-image text-gray-300 text-2xl"></i>
                         </div>
                         <div class="flex-1">
                             <input type="file" name="cover_image" id="cover-file-input" accept=".jpg,.jpeg,.png,.webp" class="input-field">
-                            <p class="text-gray-400 text-sm mt-1">JPG, PNG, WEBP (tối đa 5MB)</p>
+                            <p class="text-gray-400 text-xs mt-2">JPG, PNG, WEBP (tối đa 5MB)</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="flex gap-4 pt-4">
-                    <button type="submit" class="btn-primary py-3 px-8">
+                <div class="flex gap-4 pt-6">
+                    <button type="submit" class="btn-primary py-3.5 px-8">
                         <i class="fas fa-plus mr-2"></i> Thêm sách
                     </button>
-                    <a href="/admin/books" class="btn-secondary py-3 px-8">
+                    <a href="/admin/books" class="btn-secondary py-3.5 px-8">
                         Hủy bỏ
                     </a>
                 </div>
@@ -87,17 +89,15 @@
 </div>
 
 <script>
-    // Hiển thị tên file sách đã chọn
     document.getElementById('book-file-input').addEventListener('change', function(e) {
         const fileName = e.target.files[0]?.name;
         if (fileName) {
             const el = document.getElementById('book-file-name');
-            el.textContent = fileName;
+            el.textContent = '📄 ' + fileName;
             el.classList.remove('hidden');
         }
     });
 
-    // Preview ảnh bìa
     document.getElementById('cover-file-input').addEventListener('change', function(e) {
         const file = e.target.files[0];
         if (file) {
@@ -111,4 +111,4 @@
     });
 </script>
 
-<%- include('../../partials/footer') %>
+<%- include('../partials/footer') %>

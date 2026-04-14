@@ -4,11 +4,11 @@
 <div class="flex">
     <%- include('../partials/sidebar') %>
 
-    <main class="ml-64 flex-1 p-8 min-h-screen">
-        <div class="flex items-center justify-between mb-8">
+    <main class="ml-64 flex-1 p-8 min-h-screen bg-surface">
+        <div class="flex items-center justify-between mb-10">
             <div>
-                <h1 class="text-3xl font-bold text-gray-800">Quản lý người dùng</h1>
-                <p class="text-gray-500 mt-1">Danh sách tất cả người dùng trong hệ thống</p>
+                <p class="text-sm font-bold text-primary-600 uppercase tracking-[0.2em] mb-2">Quản lý</p>
+                <h1 class="text-3xl font-extrabold font-headline text-gray-800">Người dùng</h1>
             </div>
             <a href="/admin/users/add" class="btn-primary">
                 <i class="fas fa-user-plus mr-2"></i> Thêm người dùng
@@ -17,58 +17,57 @@
 
         <%- include('../../partials/flash') %>
 
-        <div class="card overflow-hidden">
+        <div class="bg-white rounded-2xl shadow-soft border border-gray-100/50 overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full">
-                    <thead class="bg-gray-50 border-b">
+                    <thead class="bg-surface-container-low border-b border-gray-100">
                         <tr>
-                            <th class="text-left px-6 py-4 text-sm font-semibold text-gray-600">ID</th>
-                            <th class="text-left px-6 py-4 text-sm font-semibold text-gray-600">Họ tên</th>
-                            <th class="text-left px-6 py-4 text-sm font-semibold text-gray-600">Username</th>
-                            <th class="text-left px-6 py-4 text-sm font-semibold text-gray-600">Email</th>
-                            <th class="text-left px-6 py-4 text-sm font-semibold text-gray-600">Vai trò</th>
-                            <th class="text-left px-6 py-4 text-sm font-semibold text-gray-600">Ngày tạo</th>
-                            <th class="text-left px-6 py-4 text-sm font-semibold text-gray-600">Thao tác</th>
+                            <th class="text-left px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest">ID</th>
+                            <th class="text-left px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest">Họ tên</th>
+                            <th class="text-left px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest">Username</th>
+                            <th class="text-left px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest">Email</th>
+                            <th class="text-left px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest">Vai trò</th>
+                            <th class="text-left px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest">Ngày tạo</th>
+                            <th class="text-left px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest">Thao tác</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y">
+                    <tbody class="divide-y divide-gray-50">
                         <% if (users.length > 0) { %>
                             <% users.forEach(function(u) { %>
-                                <tr class="hover:bg-gray-50 transition-colors">
-                                    <td class="px-6 py-4 text-sm text-gray-500">#<%= u.id %></td>
+                                <tr class="hover:bg-surface-container-low transition-colors duration-300">
+                                    <td class="px-6 py-4 text-sm text-gray-400 font-medium">#<%= u.id %></td>
                                     <td class="px-6 py-4">
                                         <div class="flex items-center gap-3">
-                                            <div class="w-9 h-9 rounded-full flex items-center justify-center
-                                                <%= u.role === 'admin' ? 'bg-red-100' : 'bg-primary-100' %>">
-                                                <i class="fas fa-user
-                                                    <%= u.role === 'admin' ? 'text-red-600' : 'text-primary-600' %> text-sm"></i>
+                                            <div class="w-9 h-9 rounded-xl flex items-center justify-center
+                                                <%= u.role === 'admin' ? 'bg-gradient-to-br from-red-500 to-red-400' : 'bg-gradient-to-br from-primary-500 to-primary-400' %>">
+                                                <span class="text-white text-xs font-bold"><%= u.full_name.charAt(0).toUpperCase() %></span>
                                             </div>
-                                            <span class="font-medium text-sm text-gray-800"><%= u.full_name %></span>
+                                            <span class="font-semibold text-sm text-gray-800"><%= u.full_name %></span>
                                         </div>
                                     </td>
-                                    <td class="px-6 py-4 text-sm text-gray-600"><%= u.username %></td>
-                                    <td class="px-6 py-4 text-sm text-gray-600"><%= u.email %></td>
+                                    <td class="px-6 py-4 text-sm text-gray-500"><%= u.username %></td>
+                                    <td class="px-6 py-4 text-sm text-gray-500"><%= u.email %></td>
                                     <td class="px-6 py-4">
-                                        <span class="text-xs font-bold px-2.5 py-1 rounded-full
-                                            <%= u.role === 'admin' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700' %>">
-                                            <%= u.role === 'admin' ? 'Admin' : 'User' %>
+                                        <span class="text-xs font-bold px-2.5 py-1 rounded-lg
+                                            <%= u.role === 'admin' ? 'bg-red-50 text-red-600' : 'bg-primary-50 text-primary-600' %>">
+                                            <%= u.role === 'admin' ? '👑 Admin' : 'User' %>
                                         </span>
                                     </td>
-                                    <td class="px-6 py-4 text-sm text-gray-500"><%= new Date(u.created_at).toLocaleDateString('vi-VN') %></td>
-                                                                        <td class="px-6 py-4">
-                                        <div class="flex items-center gap-2">
-                                            <a href="/admin/users/edit/<%= u.id %>" class="text-yellow-500 hover:text-yellow-600 p-1" title="Sửa">
-                                                <i class="fas fa-edit"></i>
+                                    <td class="px-6 py-4 text-sm text-gray-400 font-medium"><%= new Date(u.created_at).toLocaleDateString('vi-VN') %></td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-1">
+                                            <a href="/admin/users/edit/<%= u.id %>" class="w-8 h-8 rounded-lg flex items-center justify-center text-amber-500 hover:bg-amber-50 transition-all duration-300" title="Sửa">
+                                                <i class="fas fa-edit text-sm"></i>
                                             </a>
                                             <% if (u.id !== user.id) { %>
                                                 <form action="/admin/users/delete/<%= u.id %>" method="POST" class="inline"
                                                       onsubmit="return confirm('Bạn có chắc muốn xóa người dùng này?')">
-                                                    <button type="submit" class="text-red-600 hover:text-red-700 p-1" title="Xóa">
-                                                        <i class="fas fa-trash"></i>
+                                                    <button type="submit" class="w-8 h-8 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-50 transition-all duration-300" title="Xóa">
+                                                        <i class="fas fa-trash text-sm"></i>
                                                     </button>
                                                 </form>
                                             <% } else { %>
-                                                <span class="text-gray-400 text-xs italic">(Bạn)</span>
+                                                <span class="text-gray-400 text-xs font-medium bg-gray-100 px-2 py-1 rounded-lg">Bạn</span>
                                             <% } %>
                                         </div>
                                     </td>
@@ -76,9 +75,11 @@
                             <% }); %>
                         <% } else { %>
                             <tr>
-                                <td colspan="7" class="px-6 py-12 text-center text-gray-400">
-                                    <i class="fas fa-inbox text-4xl mb-3"></i>
-                                    <p>Chưa có người dùng nào</p>
+                                <td colspan="7" class="px-6 py-16 text-center">
+                                    <div class="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                        <i class="fas fa-inbox text-gray-300 text-2xl"></i>
+                                    </div>
+                                    <p class="text-gray-400">Chưa có người dùng nào</p>
                                 </td>
                             </tr>
                         <% } %>
@@ -89,4 +90,4 @@
     </main>
 </div>
 
-<%- include('../../partials/footer') %>
+<%- include('../partials/footer') %>

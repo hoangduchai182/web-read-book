@@ -1,79 +1,81 @@
 <%- include('../partials/header') %>
 <%- include('../partials/navbar') %>
 
-<div class="min-h-[80vh] flex items-center justify-center px-4 py-12">
+<div class="min-h-[85vh] flex items-center justify-center px-4 py-16">
     <div class="w-full max-w-md">
-        <div class="card p-8">
-            <div class="text-center mb-8">
-                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-user-plus text-green-600 text-2xl"></i>
+        <!-- Card -->
+        <div class="bg-white rounded-3xl shadow-soft-xl p-8 sm:p-10 border border-gray-100/50">
+            <!-- Header -->
+            <div class="text-center mb-10">
+                <div class="w-16 h-16 bg-gradient-to-br from-emerald-100 to-emerald-50 rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-soft">
+                    <i class="fas fa-user-plus text-emerald-600 text-xl"></i>
                 </div>
-                <h1 class="text-2xl font-bold text-gray-800">Đăng ký tài khoản</h1>
-                <p class="text-gray-500 mt-2">Tạo tài khoản để bắt đầu đọc sách</p>
+                <h1 class="text-3xl font-extrabold font-headline text-gray-800">Đăng ký tài khoản</h1>
+                <p class="text-gray-400 mt-2 text-sm">Tạo tài khoản để bắt đầu hành trình đọc sách</p>
             </div>
 
             <%- include('../partials/flash') %>
 
             <form action="/auth/register" method="POST" class="space-y-5">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Họ và tên</label>
+                    <label class="block text-sm font-semibold text-gray-600 mb-2">Họ và tên</label>
                     <div class="relative">
-                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
-                            <i class="fas fa-id-card"></i>
+                        <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400">
+                            <i class="fas fa-id-card text-sm"></i>
                         </span>
-                        <input type="text" name="full_name" class="input-field pl-10" placeholder="Nhập họ và tên" required>
+                        <input type="text" name="full_name" class="input-field pl-11" placeholder="Nhập họ và tên" required>
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Tên đăng nhập</label>
+                    <label class="block text-sm font-semibold text-gray-600 mb-2">Tên đăng nhập</label>
                     <div class="relative">
-                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
-                            <i class="fas fa-user"></i>
+                        <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400">
+                            <i class="fas fa-user text-sm"></i>
                         </span>
-                        <input type="text" name="username" class="input-field pl-10" placeholder="Nhập tên đăng nhập" required>
+                        <input type="text" name="username" class="input-field pl-11" placeholder="Nhập tên đăng nhập" required>
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                    <label class="block text-sm font-semibold text-gray-600 mb-2">Email</label>
                     <div class="relative">
-                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
-                            <i class="fas fa-envelope"></i>
+                        <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400">
+                            <i class="fas fa-envelope text-sm"></i>
                         </span>
-                        <input type="email" name="email" class="input-field pl-10" placeholder="Nhập email" required>
+                        <input type="email" name="email" class="input-field pl-11" placeholder="Nhập email" required>
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Mật khẩu</label>
+                    <label class="block text-sm font-semibold text-gray-600 mb-2">Mật khẩu</label>
                     <div class="relative">
-                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
-                            <i class="fas fa-lock"></i>
+                        <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400">
+                            <i class="fas fa-lock text-sm"></i>
                         </span>
-                        <input type="password" name="password" class="input-field pl-10" placeholder="Tối thiểu 6 ký tự" minlength="6" required>
+                        <input type="password" name="password" class="input-field pl-11" placeholder="Tối thiểu 6 ký tự" minlength="6" required>
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Xác nhận mật khẩu</label>
+                    <label class="block text-sm font-semibold text-gray-600 mb-2">Xác nhận mật khẩu</label>
                     <div class="relative">
-                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
-                            <i class="fas fa-lock"></i>
+                        <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400">
+                            <i class="fas fa-lock text-sm"></i>
                         </span>
-                        <input type="password" name="confirm_password" class="input-field pl-10" placeholder="Nhập lại mật khẩu" minlength="6" required>
+                        <input type="password" name="confirm_password" class="input-field pl-11" placeholder="Nhập lại mật khẩu" minlength="6" required>
                     </div>
                 </div>
 
-                <button type="submit" class="btn-success w-full py-3 text-lg">
+                <button type="submit" class="btn-success w-full py-3.5 text-base mt-2">
                     <i class="fas fa-user-plus mr-2"></i> Đăng ký
                 </button>
             </form>
 
-            <div class="mt-6 text-center">
-                <p class="text-gray-600">
+            <div class="mt-8 text-center">
+                <p class="text-gray-500 text-sm">
                     Đã có tài khoản?
-                    <a href="/auth/login" class="text-primary-600 hover:text-primary-700 font-semibold">Đăng nhập</a>
+                    <a href="/auth/login" class="text-primary-600 hover:text-primary-700 font-bold transition-colors">Đăng nhập</a>
                 </p>
             </div>
         </div>

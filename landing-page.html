@@ -1,0 +1,661 @@
+<!doctype html>
+
+<html class="light" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>ContentFlow CMS - Empower Your Digital Narrative</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              outline: "#777587",
+              error: "#ba1a1a",
+              surface: "#f7f9fb",
+              "tertiary-fixed-dim": "#ffb695",
+              "outline-variant": "#c7c4d8",
+              "inverse-surface": "#2d3133",
+              "on-surface-variant": "#464555",
+              "on-secondary-fixed-variant": "#413f82",
+              "surface-container": "#eceef0",
+              "surface-container-low": "#f2f4f6",
+              "on-tertiary-fixed": "#351000",
+              "tertiary-fixed": "#ffdbcc",
+              "on-tertiary-fixed-variant": "#7b2f00",
+              "on-background": "#191c1e",
+              "surface-dim": "#d8dadc",
+              "error-container": "#ffdad6",
+              "surface-container-high": "#e6e8ea",
+              "on-secondary-container": "#454386",
+              "on-primary-fixed-variant": "#3323cc",
+              "secondary-container": "#b6b4ff",
+              "on-primary": "#ffffff",
+              "primary-fixed-dim": "#c3c0ff",
+              "inverse-on-surface": "#eff1f3",
+              "on-tertiary-container": "#ffd2be",
+              "on-tertiary": "#ffffff",
+              "on-secondary": "#ffffff",
+              secondary: "#58579b",
+              primary: "#3525cd",
+              background: "#f7f9fb",
+              "on-primary-fixed": "#0f0069",
+              "on-primary-container": "#dad7ff",
+              "on-secondary-fixed": "#140f54",
+              "tertiary-container": "#a44100",
+              "primary-fixed": "#e2dfff",
+              "on-surface": "#191c1e",
+              "surface-container-lowest": "#ffffff",
+              "surface-container-highest": "#e0e3e5",
+              "surface-tint": "#4d44e3",
+              "surface-bright": "#f7f9fb",
+              "secondary-fixed-dim": "#c3c0ff",
+              "inverse-primary": "#c3c0ff",
+              tertiary: "#7e3000",
+              "surface-variant": "#e0e3e5",
+              "primary-container": "#4f46e5",
+              "secondary-fixed": "#e2dfff",
+              "on-error-container": "#93000a",
+              "on-error": "#ffffff",
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+            fontFamily: {
+              headline: ["Manrope"],
+              body: ["Inter"],
+              label: ["Inter"],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      h1,
+      h2,
+      h3,
+      .font-headline {
+        font-family: "Manrope", sans-serif;
+      }
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+      .glass-nav {
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+      }
+      .primary-gradient {
+        background: linear-gradient(135deg, #3525cd 0%, #4f46e5 100%);
+      }
+    </style>
+  </head>
+  <body class="bg-surface text-on-surface">
+    <!-- TopNavBar (Shared Component) -->
+    <nav
+      class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-slate-900/80 backdrop-blur-md shadow-[0px_12px_32px_rgba(25,28,30,0.04)]"
+    >
+      <div class="flex justify-between items-center px-8 h-16 max-w-full">
+        <!-- Brand Logo -->
+        <div
+          class="text-xl font-bold tracking-tighter text-indigo-700 dark:text-indigo-300"
+        >
+          ContentFlow CMS
+        </div>
+        <!-- Navigation Links -->
+        <div
+          class="hidden md:flex items-center gap-8 font-manrope tracking-tight font-medium text-sm"
+        >
+          <!-- Active Item: Home -->
+          <a
+            class="text-indigo-600 dark:text-indigo-400 relative after:content-[''] after:absolute after:-bottom-2 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:bg-indigo-600 after:rounded-full hover:text-indigo-500 transition-all duration-300 ease-in-out"
+            href="#"
+            >Home</a
+          >
+          <a
+            class="text-slate-600 dark:text-slate-400 font-normal hover:text-indigo-500 transition-all duration-300 ease-in-out"
+            href="#"
+            >Posts</a
+          >
+          <a
+            class="text-slate-600 dark:text-slate-400 font-normal hover:text-indigo-500 transition-all duration-300 ease-in-out"
+            href="#"
+            >Categories</a
+          >
+          <a
+            class="text-slate-600 dark:text-slate-400 font-normal hover:text-indigo-500 transition-all duration-300 ease-in-out"
+            href="#"
+            >Media</a
+          >
+          <!-- Users and Profile are Hidden for Guest View per prompt -->
+        </div>
+        <!-- Actions -->
+        <div class="flex items-center gap-4">
+          <button
+            class="px-4 py-2 text-sm font-medium text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-lg"
+          >
+            Login
+          </button>
+          <button
+            class="px-5 py-2 text-sm font-semibold text-white primary-gradient rounded-lg shadow-sm hover:opacity-90 active:scale-95 duration-200"
+          >
+            Register
+          </button>
+          <div class="ml-2 p-2 text-on-surface-variant cursor-pointer">
+            <span class="material-symbols-outlined" data-icon="notifications"
+              >notifications</span
+            >
+          </div>
+        </div>
+      </div>
+    </nav>
+    <main class="pt-16">
+      <!-- Hero Section -->
+      <section class="relative overflow-hidden px-8 py-24 md:py-32 bg-surface">
+        <div
+          class="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16"
+        >
+          <div class="flex-1 space-y-8">
+            <div
+              class="inline-flex items-center px-3 py-1 rounded-full bg-primary-fixed text-on-primary-fixed-variant text-xs font-bold tracking-wider uppercase"
+            >
+              Digital Publishing Refined
+            </div>
+            <h1
+              class="text-5xl md:text-7xl font-extrabold tracking-tight text-on-surface leading-[1.1]"
+            >
+              Empower Your
+              <span class="text-transparent bg-clip-text primary-gradient"
+                >Digital Narrative</span
+              >
+            </h1>
+            <p class="text-xl text-on-surface-variant max-w-xl leading-relaxed">
+              A modern CMS designed for high-end editorial experiences.
+              Transform your raw data into a curated gallery of ideas with our
+              fluid architectural approach.
+            </p>
+            <div class="flex flex-wrap gap-4 pt-4">
+              <button
+                class="px-8 py-4 text-white font-bold primary-gradient rounded-xl shadow-lg active:scale-95 transition-all"
+              >
+                Get Started
+              </button>
+              <button
+                class="px-8 py-4 bg-surface-container-high text-on-surface font-bold rounded-xl active:scale-95 transition-all hover:bg-surface-container-highest"
+              >
+                Explore Content
+              </button>
+            </div>
+          </div>
+          <div class="flex-1 w-full relative">
+            <div
+              class="aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl rotate-3 bg-surface-container-highest"
+            >
+              <img
+                alt="CMS Interface Preview"
+                class="w-full h-full object-cover"
+                data-alt="Modern workspace with a high-end laptop showing a clean editorial CMS dashboard with minimalist charts and typography"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvhsITqAm7yXA8o1u2hty9bCkJpouxxDHZYdgI6o9QB-zoQL1adyosMfvIqlF-PTmi7My3PQl1JgtVz9Q85K6WZfMPAf7v3gTLhekM8TogXgkSd55H_Y-Ywz4vZN7ZtNMhrb4-ueWVR1nax7j0fK2DXiqAl7IUCSyO1EqwJ_md75n5OJnniFhnJDnGRFjnTZh7_R1EcAaDm3Fsi3FE13hkcCle5jjBma9aYtVoa3m8yWGDTuDNZ8FoG0qwP2QG2BSEFtqOFJcpcrM5"
+              />
+            </div>
+            <div
+              class="absolute -bottom-8 -left-8 w-48 h-48 rounded-2xl primary-gradient opacity-20 -z-10 blur-3xl"
+            ></div>
+          </div>
+        </div>
+      </section>
+      <!-- System Stats -->
+      <section class="px-8 py-12 bg-surface-container-low">
+        <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div
+            class="p-6 bg-surface-container-lowest rounded-2xl shadow-sm space-y-2 border-l-4 border-primary"
+          >
+            <p
+              class="text-sm font-medium text-on-surface-variant uppercase tracking-widest"
+            >
+              Active Posts
+            </p>
+            <h3 class="text-3xl font-extrabold text-on-surface">1.2k+</h3>
+          </div>
+          <div
+            class="p-6 bg-surface-container-lowest rounded-2xl shadow-sm space-y-2"
+          >
+            <p
+              class="text-sm font-medium text-on-surface-variant uppercase tracking-widest"
+            >
+              Media Assets
+            </p>
+            <h3 class="text-3xl font-extrabold text-on-surface">500+</h3>
+          </div>
+          <div
+            class="p-6 bg-surface-container-lowest rounded-2xl shadow-sm space-y-2"
+          >
+            <p
+              class="text-sm font-medium text-on-surface-variant uppercase tracking-widest"
+            >
+              Daily Readers
+            </p>
+            <h3 class="text-3xl font-extrabold text-on-surface">8.4k</h3>
+          </div>
+          <div
+            class="p-6 bg-surface-container-lowest rounded-2xl shadow-sm space-y-2"
+          >
+            <p
+              class="text-sm font-medium text-on-surface-variant uppercase tracking-widest"
+            >
+              Categories
+            </p>
+            <h3 class="text-3xl font-extrabold text-on-surface">24</h3>
+          </div>
+        </div>
+      </section>
+      <!-- Featured Posts (Bento Grid Style) -->
+      <section class="px-8 py-24 max-w-7xl mx-auto">
+        <div
+          class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4"
+        >
+          <div class="space-y-2">
+            <h2
+              class="text-title-md uppercase tracking-[0.1em] text-on-surface-variant font-bold"
+            >
+              Featured Posts
+            </h2>
+            <p class="text-4xl font-extrabold text-on-surface">
+              Curation that inspires.
+            </p>
+          </div>
+          <a
+            class="text-primary font-bold inline-flex items-center gap-2 hover:translate-x-1 transition-transform"
+            href="#"
+          >
+            View Archive
+            <span class="material-symbols-outlined">trending_flat</span>
+          </a>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <!-- Large Featured Card -->
+          <div
+            class="md:col-span-2 group cursor-pointer relative overflow-hidden rounded-3xl bg-surface-container-lowest shadow-sm hover:shadow-xl transition-all duration-500"
+          >
+            <div
+              class="absolute top-0 left-0 w-full h-1 primary-gradient"
+            ></div>
+            <div class="flex flex-col md:flex-row h-full">
+              <div class="md:w-1/2 h-64 md:h-full overflow-hidden">
+                <img
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  data-alt="Minimalist architectural photography of a modern building with clean lines and soft blue shadows"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPdeZyOB8LfvajiwRZXCI3g7VIS5w53Q2n7DOtAw5yAo7KFMTF8e60aEcM5QAbxIeE6OThFsZr1hj0DPhFBw7z7MJLp8pq73-6DSS-Bbi423WAPrrZ4qDRp2B-UUcuCq5HQJkvNwenAa3OC7u0ayNAj5nMf0PZ__NnSDB0nSjN1t1QA0E_jisn9H95l_9Ber5EDNZmRCRsArF73JVtZ_tvqPn-gIWdL4lNANIpz3mMaqtJkqWyXx3bHH7DsMDF9xsEykg1Ve1s4NiZ"
+                />
+              </div>
+              <div class="md:w-1/2 p-10 flex flex-col justify-center space-y-4">
+                <span
+                  class="text-xs font-bold text-primary uppercase tracking-widest"
+                  >Innovation</span
+                >
+                <h3
+                  class="text-3xl font-bold text-on-surface group-hover:text-primary transition-colors"
+                >
+                  The Future of Asymmetric Layouts in Web Design
+                </h3>
+                <p class="text-on-surface-variant line-clamp-3">
+                  Explore how breaking the traditional grid system can lead to
+                  more engaging and artistic user experiences in modern SaaS
+                  platforms.
+                </p>
+                <div class="pt-4 flex items-center gap-3">
+                  <div
+                    class="w-10 h-10 rounded-full bg-surface-container-high"
+                  ></div>
+                  <div>
+                    <p class="text-sm font-bold text-on-surface">Alex Rivera</p>
+                    <p class="text-xs text-on-surface-variant">Design Lead</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Secondary Featured -->
+          <div
+            class="group cursor-pointer bg-surface-container-lowest rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all p-2"
+          >
+            <div class="h-56 overflow-hidden rounded-2xl mb-6">
+              <img
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                data-alt="Abstract macro shot of vibrant neon digital light patterns with a technological feel"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4F8b2zJVLQvi2EjxiyCHwV_DjNiYJCwuSpSzxxmPnuQUTevWq2zUcqdpuWo3GtyVAdZWBqeNXtwnx2nmWz0lhCtFLHiBOIJs7qCpg4coLqicXKIfZMHGdEElrv_0rasNnNmEnKi1Lv2T8nWU2Y35pzsdW-4qglnWJSDaPL4cWR3Oi3zn6w1Xu6R3p0WeDwmKHXMPOfjqEdj5J3g7Hjb3SSaVhXGM0ZHgeUtmoflo8-EPY60-KN1vSpqnVXghCeTdr4zC-jRQwcxcW"
+              />
+            </div>
+            <div class="px-6 pb-8 space-y-3">
+              <span
+                class="text-xs font-bold text-secondary uppercase tracking-widest"
+                >Technology</span
+              >
+              <h3
+                class="text-xl font-bold text-on-surface group-hover:text-primary transition-colors"
+              >
+                Optimizing Assets for Content Delivery Networks
+              </h3>
+              <p class="text-sm text-on-surface-variant line-clamp-2">
+                A technical deep dive into modern asset management strategies
+                for ultra-fast content flows.
+              </p>
+            </div>
+          </div>
+          <!-- Third Featured -->
+          <div
+            class="group cursor-pointer bg-surface-container-lowest rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all p-2"
+          >
+            <div class="h-56 overflow-hidden rounded-2xl mb-6">
+              <img
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                data-alt="Close up of a premium workspace with stationery, a minimal desk clock, and soft natural morning light"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuA47Xg-_vKmJa_MEjmm7Uch_VWGKXcyjPN42QvsRsNNXT1hElQCZj80UE7hoCdIJuTi6vwMd005FfpOJA8s83Rm-YZYAIyN6NXHqAY_tx_2I5r8utQTu-XZf7xExDwBTF4SZ-aIRgQqrylER-QF81pFwSiPgeA3vcDpSlx78uITzXS4vFjpQn94HTOuBEfORnMj8-MsNCuCD89PHXGg3_knYErnV3gAYb9jo4Lx0I0MgBWA79M-ti1xT5HNuwtkJ55TfxmJUaZiFUig"
+              />
+            </div>
+            <div class="px-6 pb-8 space-y-3">
+              <span
+                class="text-xs font-bold text-tertiary uppercase tracking-widest"
+                >Lifestyle</span
+              >
+              <h3
+                class="text-xl font-bold text-on-surface group-hover:text-primary transition-colors"
+              >
+                Minimalism: More Than Just an Aesthetic
+              </h3>
+              <p class="text-sm text-on-surface-variant line-clamp-2">
+                How reducing interface friction improves creator productivity
+                and mental clarity in the CMS space.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Browse by Category -->
+      <section class="bg-surface-container-low py-24 px-8">
+        <div class="max-w-7xl mx-auto">
+          <div class="text-center mb-16 space-y-4">
+            <h2
+              class="text-title-md uppercase tracking-[0.2em] text-on-surface-variant font-bold"
+            >
+              Categories
+            </h2>
+            <p class="text-4xl font-extrabold text-on-surface">
+              Explore by Interest
+            </p>
+          </div>
+          <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+            <!-- Category Card -->
+            <div
+              class="group flex flex-col items-center p-8 bg-surface-container-lowest rounded-2xl hover:bg-primary transition-all duration-300 cursor-pointer shadow-sm"
+            >
+              <div
+                class="w-16 h-16 rounded-full bg-surface-container-high group-hover:bg-white/20 flex items-center justify-center mb-4 transition-colors"
+              >
+                <span
+                  class="material-symbols-outlined text-primary group-hover:text-white"
+                  data-icon="brush"
+                  >brush</span
+                >
+              </div>
+              <span
+                class="font-bold text-on-surface group-hover:text-white transition-colors"
+                >Design</span
+              >
+            </div>
+            <div
+              class="group flex flex-col items-center p-8 bg-surface-container-lowest rounded-2xl hover:bg-primary transition-all duration-300 cursor-pointer shadow-sm"
+            >
+              <div
+                class="w-16 h-16 rounded-full bg-surface-container-high group-hover:bg-white/20 flex items-center justify-center mb-4 transition-colors"
+              >
+                <span
+                  class="material-symbols-outlined text-primary group-hover:text-white"
+                  data-icon="code"
+                  >code</span
+                >
+              </div>
+              <span
+                class="font-bold text-on-surface group-hover:text-white transition-colors"
+                >Dev</span
+              >
+            </div>
+            <div
+              class="group flex flex-col items-center p-8 bg-surface-container-lowest rounded-2xl hover:bg-primary transition-all duration-300 cursor-pointer shadow-sm"
+            >
+              <div
+                class="w-16 h-16 rounded-full bg-surface-container-high group-hover:bg-white/20 flex items-center justify-center mb-4 transition-colors"
+              >
+                <span
+                  class="material-symbols-outlined text-primary group-hover:text-white"
+                  data-icon="trending_up"
+                  >trending_up</span
+                >
+              </div>
+              <span
+                class="font-bold text-on-surface group-hover:text-white transition-colors"
+                >Growth</span
+              >
+            </div>
+            <div
+              class="group flex flex-col items-center p-8 bg-surface-container-lowest rounded-2xl hover:bg-primary transition-all duration-300 cursor-pointer shadow-sm"
+            >
+              <div
+                class="w-16 h-16 rounded-full bg-surface-container-high group-hover:bg-white/20 flex items-center justify-center mb-4 transition-colors"
+              >
+                <span
+                  class="material-symbols-outlined text-primary group-hover:text-white"
+                  data-icon="camera_alt"
+                  >camera_alt</span
+                >
+              </div>
+              <span
+                class="font-bold text-on-surface group-hover:text-white transition-colors"
+                >Media</span
+              >
+            </div>
+            <div
+              class="group flex flex-col items-center p-8 bg-surface-container-lowest rounded-2xl hover:bg-primary transition-all duration-300 cursor-pointer shadow-sm"
+            >
+              <div
+                class="w-16 h-16 rounded-full bg-surface-container-high group-hover:bg-white/20 flex items-center justify-center mb-4 transition-colors"
+              >
+                <span
+                  class="material-symbols-outlined text-primary group-hover:text-white"
+                  data-icon="public"
+                  >public</span
+                >
+              </div>
+              <span
+                class="font-bold text-on-surface group-hover:text-white transition-colors"
+                >World</span
+              >
+            </div>
+            <div
+              class="group flex flex-col items-center p-8 bg-surface-container-lowest rounded-2xl hover:bg-primary transition-all duration-300 cursor-pointer shadow-sm"
+            >
+              <div
+                class="w-16 h-16 rounded-full bg-surface-container-high group-hover:bg-white/20 flex items-center justify-center mb-4 transition-colors"
+              >
+                <span
+                  class="material-symbols-outlined text-primary group-hover:text-white"
+                  data-icon="psychology"
+                  >psychology</span
+                >
+              </div>
+              <span
+                class="font-bold text-on-surface group-hover:text-white transition-colors"
+                >Ideas</span
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Media Gallery -->
+      <section class="px-8 py-24 max-w-7xl mx-auto">
+        <div
+          class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4"
+        >
+          <div class="space-y-2">
+            <h2
+              class="text-title-md uppercase tracking-[0.1em] text-on-surface-variant font-bold"
+            >
+              Public Media
+            </h2>
+            <p class="text-4xl font-extrabold text-on-surface">
+              The Visual Essence.
+            </p>
+          </div>
+          <button
+            class="px-6 py-3 bg-surface-container-high text-on-surface font-bold rounded-full hover:bg-surface-container-highest transition-colors"
+          >
+            Explore Gallery
+          </button>
+        </div>
+        <div class="columns-1 md:columns-3 lg:columns-4 gap-6 space-y-6">
+          <div class="relative group rounded-2xl overflow-hidden shadow-sm">
+            <img
+              class="w-full hover:scale-110 transition-transform duration-500"
+              data-alt="Close-up of retro tech gadgets including old cameras and transistors with warm cinematic lighting"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9ku0LmrKYFxapRF4ANrmDAwZyaVZ7YpWAa-Rbyd24hIN86JAJNsCrCPbaHBY6Hfmt1Mu50Rti6waZmpNQNKtjg5od8uVwz9LEn1vxCZCzzi6mD8R1BWpX78jb444GCSziqQ_Aj1kPPO4jHzXvUPkkza5IoyXXNZV47_48UKZcHhH__AhacXtCrN508aAYreLFho_9dFrUFBqxyTfA-FdttwVxyC-Teh_1EtsTTfVo9pMu-39AigLrML7n-xqHpSVftV-RsTYiQ1Jp"
+            />
+            <div
+              class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4"
+            >
+              <p class="text-white text-sm font-medium">Retro Collection</p>
+            </div>
+          </div>
+          <div class="relative group rounded-2xl overflow-hidden shadow-sm">
+            <img
+              class="w-full hover:scale-110 transition-transform duration-500"
+              data-alt="Spacious modern office interior with glass walls, minimalist furniture, and plenty of natural daylight"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCyaeGQaew5zbsbzHJNHOAKM3ORbmtisradBf5kAtlbt5JMoGOR6Chw4s5CvWZb7dNuhqJhz1OFSoKNjpHNtGm75-0G8E8oQoch5p1XiChBWy8g-yPGygpwvOEvYW0CioDQW_4z4m4iyI-_YZd7N794pH9y4Lo_B0oKRAo6xmUpPnWOmSYSi2Z_HfQ1zHI1BRG32KOE1akX8CMD9sRwl_CwLD-aY0IOMpWK7eHR8MFu6cfAokosrDc_hYb745_72Mtj1QrfBaKxQaAB"
+            />
+            <div
+              class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4"
+            >
+              <p class="text-white text-sm font-medium">Workspace Vibes</p>
+            </div>
+          </div>
+          <div class="relative group rounded-2xl overflow-hidden shadow-sm">
+            <img
+              class="w-full hover:scale-110 transition-transform duration-500"
+              data-alt="Overhead shot of a rustic wooden table with artisanal food and morning coffee in a cozy setting"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGKdRUnTXZ8F9CyfyI6svIxEZDiqIHQau2d2p0MdNVLSxlapv9O8u24jB1VFg439EBnZ0whB-Q2thCgfVlsL6uXe-pkdNvETh2QB6AXoPCv_2moU5TZeNUDTwPR8L4eHkYaF6C0YBhAu6UjY6-1_2DK33UZii8zBgb0JDn3KTgY4tkhuHt0oUrhvybYxcx0mP9VV-tMxb9KVaaj-b62niI4ERWlMxzybxTogJ1sgelacX1OTfu5Tperv-dOyY0XDtOT5KMoUPb8SyZ"
+            />
+            <div
+              class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4"
+            >
+              <p class="text-white text-sm font-medium">Morning Focus</p>
+            </div>
+          </div>
+          <div class="relative group rounded-2xl overflow-hidden shadow-sm">
+            <img
+              class="w-full hover:scale-110 transition-transform duration-500"
+              data-alt="Smooth abstract gradient in shades of blue and purple with a high-end luxury fabric texture"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtTSgrXGTsKRKxxe1QwKkvaKC3a5ESFJ27jGWwQ0vbfCzCMDE9iKRTumTIFkzxJyVTarpi1B52VMGX5xL8jag3HgmXXzNWxfFy5_o54z8IQWKfT8wYiYIShFzp6-uDmzHRMY92RRfkkdApHmCPhVr-CeCEt48nwMMqx4v8tFXDSZRVY0mK8bNDwBc0StYorw3Mg-R7RUs8u8q3jDUPYs4-psvPgdmNQHXd_hlZ7uGmQvV3EfRr47pt0UC0Vfpfo7nIMA4RzP0NfvC6"
+            />
+            <div
+              class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4"
+            >
+              <p class="text-white text-sm font-medium">Abstract Flow</p>
+            </div>
+          </div>
+          <div class="relative group rounded-2xl overflow-hidden shadow-sm">
+            <img
+              class="w-full hover:scale-110 transition-transform duration-500"
+              data-alt="Group of creative professionals collaborating in a brightly lit studio with sketches and moodboards on the walls"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnenfO-z6PjfgRBCVoqpPf-hXEZC5uXUk0EMkfS2dtMEa7VXHZl49tRbj4P5cVa7GdZcDxUyUU8DsvFPWxzLP2rYqcfDAg0f0v4cf9l_aU4D-wTuWkbw0L0SaV_d4cvuUbKmntvTNDeYVeMzB8-jkC01N412JUaTzWzNAR5x_fTlnWDu-W1U8NMEQXpyT7VMCqrbMkbByMc3196x8Y4fzZCeFl5745mH2BnggP3uXmkMFVJZqyh_PMmTA4IQdiOLA4swDE0O52Bhs_"
+            />
+            <div
+              class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4"
+            >
+              <p class="text-white text-sm font-medium">Team Synergy</p>
+            </div>
+          </div>
+          <div class="relative group rounded-2xl overflow-hidden shadow-sm">
+            <img
+              class="w-full hover:scale-110 transition-transform duration-500"
+              data-alt="Lush green forest floor at sunrise with soft light filtering through the trees and misty atmosphere"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAt98hxi1Eb_XT9NW_pMsxlsnDl-Ht6z0KL7QHeToRverlGImwE3HNudakPwkKhFkcYAsZjl3ehHzp3eLFkQ0N516aMa_TPHMV7ANPH2gJXujAdE6G0W1KDCG_6Oowxw-vLyLBlRSHPvBZu9-53aov33WE0fvgxewwo4sTHW6ZMSOAfrSSlW9PowDpb7dZT43hMx9m2pD65oCIPrkRl_SaM8cO4B0KS5uULWzQR9a2KsMiZyKltrX20t7EsTMdXK8TkZXwzfzh1ZKgn"
+            />
+            <div
+              class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4"
+            >
+              <p class="text-white text-sm font-medium">Nature Series</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Final CTA -->
+      <section class="px-8 py-24 bg-inverse-surface text-inverse-on-surface">
+        <div class="max-w-4xl mx-auto text-center space-y-10">
+          <h2 class="text-4xl md:text-5xl font-extrabold tracking-tight">
+            Ready to join the flow?
+          </h2>
+          <p class="text-xl text-surface-dim max-w-2xl mx-auto leading-relaxed">
+            Join thousands of creators who have elevated their publishing
+            experience with ContentFlow CMS. Start your narrative journey today.
+          </p>
+          <div
+            class="flex flex-col md:flex-row items-center justify-center gap-6"
+          >
+            <button
+              class="w-full md:w-auto px-10 py-5 primary-gradient rounded-xl font-bold text-lg shadow-xl hover:scale-105 transition-transform"
+            >
+              Create Your Account
+            </button>
+            <button
+              class="w-full md:w-auto px-10 py-5 border-2 border-surface-container-highest text-inverse-on-surface rounded-xl font-bold text-lg hover:bg-surface-container-low/10 transition-colors"
+            >
+              Contact Sales
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+    <!-- Simple Guest Footer -->
+    <footer class="bg-surface py-12 px-8 border-t border-outline-variant/20">
+      <div
+        class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8"
+      >
+        <div class="text-xl font-bold tracking-tighter text-indigo-700">
+          ContentFlow CMS
+        </div>
+        <div class="flex gap-8 text-sm text-on-surface-variant font-medium">
+          <a class="hover:text-primary" href="#">Privacy Policy</a>
+          <a class="hover:text-primary" href="#">Terms of Service</a>
+          <a class="hover:text-primary" href="#">API Docs</a>
+          <a class="hover:text-primary" href="#">Support</a>
+        </div>
+        <div class="text-sm text-outline">
+          © 2024 ContentFlow. Built for Creators.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

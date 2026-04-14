@@ -3,7 +3,8 @@ import bcrypt from "bcryptjs";
 import path from "path";
 import pool from "../config/database";
 import { isAuthenticated, isAdmin } from "../middlewares/auth";
-import { uploadBook, uploadCover } from "../middlewares/upload";
+
+import { uploadBookWithCover } from "../middlewares/upload";
 import { RowDataPacket, ResultSetHeader } from "mysql2";
 
 const router = Router();
@@ -97,7 +98,7 @@ router.get("/books/add", async (req: Request, res: Response) => {
 
 // POST /admin/books/add - Xử lý thêm sách
 router.post("/books/add", (req: Request, res: Response) => {
-  const upload = uploadBook.fields([
+  const upload = uploadBookWithCover.fields([
     { name: "book_file", maxCount: 1 },
     { name: "cover_image", maxCount: 1 },
   ]);
@@ -193,7 +194,7 @@ router.get("/books/edit/:id", async (req: Request, res: Response) => {
 
 // POST /admin/books/edit/:id - Xử lý chỉnh sửa sách
 router.post("/books/edit/:id", (req: Request, res: Response) => {
-  const upload = uploadBook.fields([
+  const upload = uploadBookWithCover.fields([
     { name: "book_file", maxCount: 1 },
     { name: "cover_image", maxCount: 1 },
   ]);

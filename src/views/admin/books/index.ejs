@@ -4,11 +4,11 @@
 <div class="flex">
     <%- include('../partials/sidebar') %>
 
-    <main class="ml-64 flex-1 p-8 min-h-screen">
-        <div class="flex items-center justify-between mb-8">
+    <main class="ml-64 flex-1 p-8 min-h-screen bg-surface">
+        <div class="flex items-center justify-between mb-10">
             <div>
-                <h1 class="text-3xl font-bold text-gray-800">Quản lý sách</h1>
-                <p class="text-gray-500 mt-1">Danh sách tất cả sách trong hệ thống</p>
+                <p class="text-sm font-bold text-primary-600 uppercase tracking-[0.2em] mb-2">Quản lý</p>
+                <h1 class="text-3xl font-extrabold font-headline text-gray-800">Danh sách sách</h1>
             </div>
             <a href="/admin/books/add" class="btn-primary">
                 <i class="fas fa-plus mr-2"></i> Thêm sách mới
@@ -17,28 +17,28 @@
 
         <%- include('../../partials/flash') %>
 
-        <div class="card overflow-hidden">
+        <div class="bg-white rounded-2xl shadow-soft border border-gray-100/50 overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full">
-                    <thead class="bg-gray-50 border-b">
+                    <thead class="bg-surface-container-low border-b border-gray-100">
                         <tr>
-                            <th class="text-left px-6 py-4 text-sm font-semibold text-gray-600">ID</th>
-                            <th class="text-left px-6 py-4 text-sm font-semibold text-gray-600">Sách</th>
-                            <th class="text-left px-6 py-4 text-sm font-semibold text-gray-600">Tác giả</th>
-                            <th class="text-left px-6 py-4 text-sm font-semibold text-gray-600">Thể loại</th>
-                            <th class="text-left px-6 py-4 text-sm font-semibold text-gray-600">Định dạng</th>
-                            <th class="text-left px-6 py-4 text-sm font-semibold text-gray-600">Ngày thêm</th>
-                            <th class="text-left px-6 py-4 text-sm font-semibold text-gray-600">Thao tác</th>
+                            <th class="text-left px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest">ID</th>
+                            <th class="text-left px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest">Sách</th>
+                            <th class="text-left px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest">Tác giả</th>
+                            <th class="text-left px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest">Thể loại</th>
+                            <th class="text-left px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest">Định dạng</th>
+                            <th class="text-left px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest">Ngày thêm</th>
+                            <th class="text-left px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest">Thao tác</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y">
+                    <tbody class="divide-y divide-gray-50">
                         <% if (books.length > 0) { %>
                             <% books.forEach(function(book) { %>
-                                <tr class="hover:bg-gray-50 transition-colors">
-                                    <td class="px-6 py-4 text-sm text-gray-500">#<%= book.id %></td>
+                                <tr class="hover:bg-surface-container-low transition-colors duration-300">
+                                    <td class="px-6 py-4 text-sm text-gray-400 font-medium">#<%= book.id %></td>
                                     <td class="px-6 py-4">
                                         <div class="flex items-center gap-3">
-                                            <div class="w-10 h-14 rounded overflow-hidden bg-gray-200 flex-shrink-0">
+                                            <div class="w-10 h-14 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0 shadow-soft">
                                                 <% if (book.cover_image) { %>
                                                     <img src="<%= book.cover_image %>" alt="" class="w-full h-full object-cover">
                                                 <% } else { %>
@@ -47,30 +47,30 @@
                                                     </div>
                                                 <% } %>
                                             </div>
-                                            <span class="font-medium text-sm text-gray-800 truncate max-w-[200px]" title="<%= book.title %>"><%= book.title %></span>
+                                            <span class="font-semibold text-sm text-gray-800 truncate max-w-[200px]" title="<%= book.title %>"><%= book.title %></span>
                                         </div>
                                     </td>
-                                    <td class="px-6 py-4 text-sm text-gray-600"><%= book.author %></td>
-                                    <td class="px-6 py-4 text-sm text-gray-600"><%= book.category_name || 'Chưa phân loại' %></td>
+                                    <td class="px-6 py-4 text-sm text-gray-500"><%= book.author %></td>
+                                    <td class="px-6 py-4 text-sm text-gray-500"><%= book.category_name || 'Chưa phân loại' %></td>
                                     <td class="px-6 py-4">
-                                        <span class="text-xs font-bold px-2 py-1 rounded uppercase
-                                            <%= book.file_type === 'pdf' ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600' %>">
+                                        <span class="text-xs font-bold px-2.5 py-1 rounded-lg uppercase
+                                            <%= book.file_type === 'pdf' ? 'bg-red-50 text-red-600' : 'bg-emerald-50 text-emerald-600' %>">
                                             <%= book.file_type %>
                                         </span>
                                     </td>
-                                    <td class="px-6 py-4 text-sm text-gray-500"><%= new Date(book.created_at).toLocaleDateString('vi-VN') %></td>
+                                    <td class="px-6 py-4 text-sm text-gray-400 font-medium"><%= new Date(book.created_at).toLocaleDateString('vi-VN') %></td>
                                     <td class="px-6 py-4">
-                                        <div class="flex items-center gap-2">
-                                                                                        <a href="/books/<%= book.id %>" target="_blank" class="text-primary-600 hover:text-primary-700 p-1" title="Xem">
-                                                <i class="fas fa-eye"></i>
+                                        <div class="flex items-center gap-1">
+                                            <a href="/books/<%= book.id %>" target="_blank" class="w-8 h-8 rounded-lg flex items-center justify-center text-primary-500 hover:bg-primary-50 transition-all duration-300" title="Xem">
+                                                <i class="fas fa-eye text-sm"></i>
                                             </a>
-                                            <a href="/admin/books/edit/<%= book.id %>" class="text-yellow-500 hover:text-yellow-600 p-1" title="Sửa">
-                                                <i class="fas fa-edit"></i>
+                                            <a href="/admin/books/edit/<%= book.id %>" class="w-8 h-8 rounded-lg flex items-center justify-center text-amber-500 hover:bg-amber-50 transition-all duration-300" title="Sửa">
+                                                <i class="fas fa-edit text-sm"></i>
                                             </a>
                                             <form action="/admin/books/delete/<%= book.id %>" method="POST" class="inline"
                                                   onsubmit="return confirm('Bạn có chắc muốn xóa sách này?')">
-                                                <button type="submit" class="text-red-600 hover:text-red-700 p-1" title="Xóa">
-                                                    <i class="fas fa-trash"></i>
+                                                <button type="submit" class="w-8 h-8 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-50 transition-all duration-300" title="Xóa">
+                                                    <i class="fas fa-trash text-sm"></i>
                                                 </button>
                                             </form>
                                         </div>
@@ -79,9 +79,11 @@
                             <% }); %>
                         <% } else { %>
                             <tr>
-                                <td colspan="7" class="px-6 py-12 text-center text-gray-400">
-                                    <i class="fas fa-inbox text-4xl mb-3"></i>
-                                    <p>Chưa có sách nào. <a href="/admin/books/add" class="text-primary-600 hover:underline">Thêm sách mới</a></p>
+                                <td colspan="7" class="px-6 py-16 text-center">
+                                    <div class="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                        <i class="fas fa-inbox text-gray-300 text-2xl"></i>
+                                    </div>
+                                    <p class="text-gray-400">Chưa có sách nào. <a href="/admin/books/add" class="text-primary-600 font-semibold hover:underline">Thêm sách mới</a></p>
                                 </td>
                             </tr>
                         <% } %>
@@ -92,4 +94,4 @@
     </main>
 </div>
 
-<%- include('../../partials/footer') %>
+<%- include('../partials/footer') %>

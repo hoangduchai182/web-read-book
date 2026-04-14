@@ -1,49 +1,62 @@
-<%- include('../partials/header') %>
+﻿<%- include('../partials/header') %>
 <%- include('../partials/navbar') %>
 
-<div class="min-h-[80vh] flex items-center justify-center px-4 py-12">
+<div class="min-h-[85vh] flex items-center justify-center px-4 py-16">
     <div class="w-full max-w-md">
-        <div class="card p-8">
-            <div class="text-center mb-8">
-                <div class="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-sign-in-alt text-primary-600 text-2xl"></i>
+        <!-- Card -->
+        <div class="bg-white rounded-3xl shadow-soft-xl p-8 sm:p-10 border border-gray-100/50">
+            <!-- Header -->
+            <div class="text-center mb-10">
+                <div class="w-16 h-16 bg-gradient-to-br from-primary-100 to-primary-50 rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-soft">
+                    <i class="fas fa-sign-in-alt text-primary-600 text-xl"></i>
                 </div>
-                <h1 class="text-2xl font-bold text-gray-800">Đăng nhập</h1>
-                <p class="text-gray-500 mt-2">Chào mừng bạn trở lại!</p>
+                <h1 class="text-3xl font-extrabold font-headline text-gray-800">Đăng nhập</h1>
+                <p class="text-gray-400 mt-2 text-sm">Chào mừng bạn quay trở lại BookRead</p>
             </div>
 
             <%- include('../partials/flash') %>
 
             <form action="/auth/login" method="POST" class="space-y-5">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Tên đăng nhập hoặc Email</label>
+                    <label class="block text-sm font-semibold text-gray-600 mb-2">Tên đăng nhập</label>
                     <div class="relative">
-                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
-                            <i class="fas fa-user"></i>
+                        <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400">
+                            <i class="fas fa-user text-sm"></i>
                         </span>
-                        <input type="text" name="username" class="input-field pl-10" placeholder="Nhập username hoặc email" required>
+                        <input type="text" name="username" class="input-field pl-11" placeholder="Nhập tên đăng nhập" required>
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Mật khẩu</label>
+                    <label class="block text-sm font-semibold text-gray-600 mb-2">Mật khẩu</label>
                     <div class="relative">
-                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
-                            <i class="fas fa-lock"></i>
+                        <span
+                            class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400"
+                        >
+                            <i class="fas fa-lock text-sm"></i>
                         </span>
-                        <input type="password" name="password" class="input-field pl-10" placeholder="Nhập mật khẩu" required>
+                        <input
+                            type="password"
+                            name="password"
+                            class="input-field pl-11"
+                            placeholder="Nhập mật khẩu"
+                            required
+                        />
                     </div>
                 </div>
 
-                <button type="submit" class="btn-primary w-full py-3 text-lg">
+                <button type="submit" class="btn-primary w-full py-3.5 text-base mt-2">
                     <i class="fas fa-sign-in-alt mr-2"></i> Đăng nhập
                 </button>
             </form>
 
-            <div class="mt-6 text-center">
-                <p class="text-gray-600">
+            <div class="mt-8 text-center">
+                <p class="text-gray-500 text-sm">
                     Chưa có tài khoản?
-                    <a href="/auth/register" class="text-primary-600 hover:text-primary-700 font-semibold">Đăng ký ngay</a>
+                    <a
+                        href="/auth/register"
+                        class="text-primary-600 hover:text-primary-700 font-bold transition-colors"
+                    >Đăng ký ngay</a>
                 </p>
             </div>
         </div>
