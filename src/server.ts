@@ -46,6 +46,7 @@ app.use(flash());
 // Global variables cho views
 app.use((req, res, next) => {
   res.locals.user = req.session.user || null;
+  res.locals.reqPath = req.path;
   next();
 });
 

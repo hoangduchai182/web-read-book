@@ -17,6 +17,197 @@
   .font-headline {
     font-family: "Manrope", ui-sans-serif, system-ui, sans-serif;
   }
+
+  /* Dark mode base */
+  .dark body,
+  .dark {
+    color-scheme: dark;
+  }
+  .dark .bg-surface {
+    background-color: #0f172a;
+  }
+  .dark .bg-surface-container-low {
+    background-color: #1e293b;
+  }
+}
+
+/* === Scroll Reveal Animations === */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Elements waiting to be revealed */
+.reveal {
+  opacity: 0 !important;
+  visibility: visible;
+}
+
+/* Animation variants - when revealed */
+.reveal-up.revealed {
+  animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.reveal-left.revealed {
+  animation: fadeInLeft 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.reveal-right.revealed {
+  animation: fadeInRight 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.reveal-fade.revealed {
+  animation: fadeIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.reveal-down.revealed {
+  animation: fadeInDown 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Override opacity when revealed (after animation completes) */
+.reveal.revealed {
+  opacity: 1 !important;
+}
+
+/* Stagger delays for children */
+.reveal-delay-1 {
+  animation-delay: 0.1s !important;
+}
+.reveal-delay-2 {
+  animation-delay: 0.2s !important;
+}
+.reveal-delay-3 {
+  animation-delay: 0.3s !important;
+}
+.reveal-delay-4 {
+  animation-delay: 0.4s !important;
+}
+.reveal-delay-5 {
+  animation-delay: 0.5s !important;
+}
+.reveal-delay-6 {
+  animation-delay: 0.6s !important;
+}
+.reveal-delay-7 {
+  animation-delay: 0.7s !important;
+}
+.reveal-delay-8 {
+  animation-delay: 0.8s !important;
+}
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+}
+
+/* === Skeleton Loading === */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: 0.5rem;
+}
+
+.dark .skeleton {
+  background: linear-gradient(90deg, #334155 25%, #475569 50%, #334155 75%);
+  background-size: 200% 100%;
+}
+
+/* === Scroll to Top Button === */
+#scroll-top-btn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 40;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 24px rgba(79, 70, 229, 0.3);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+#scroll-top-btn.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+#scroll-top-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 32px rgba(79, 70, 229, 0.4);
 }
 
 @layer components {

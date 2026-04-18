@@ -4,8 +4,8 @@
 <div class="min-h-[85vh] flex items-center justify-center px-4 py-16">
     <div class="w-full max-w-md">
         <!-- Card -->
-        <div class="bg-white rounded-3xl shadow-soft-xl p-8 sm:p-10 border border-gray-100/50">
-            <!-- Header -->
+        <div class="bg-white rounded-3xl shadow-soft-xl p-8 sm:p-10 border border-gray-100/50 reveal reveal-up">
+                  <!-- Header -->
             <div class="text-center mb-10">
                 <div class="w-16 h-16 bg-gradient-to-br from-emerald-100 to-emerald-50 rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-soft">
                     <i class="fas fa-user-plus text-emerald-600 text-xl"></i>
@@ -14,10 +14,10 @@
                 <p class="text-gray-400 mt-2 text-sm">Tạo tài khoản để bắt đầu hành trình đọc sách</p>
             </div>
 
-            <%- include('../partials/flash') %>
+                  <%- include('../partials/flash') %>
 
-            <form action="/auth/register" method="POST" class="space-y-5">
-                <div>
+            <form action="/auth/register" method="POST" class="space-y-5 reveal reveal-up" style="animation-delay: 0.2s">
+                        <div>
                     <label class="block text-sm font-semibold text-gray-600 mb-2">Họ và tên</label>
                     <div class="relative">
                         <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400">

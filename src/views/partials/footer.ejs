@@ -1,8 +1,8 @@
-<footer class="bg-gray-900 text-gray-400 mt-20">
+<footer class="bg-gray-900 dark:bg-gray-950 text-gray-400 mt-20 border-t border-gray-800/50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
             <!-- Brand -->
-            <div class="md:col-span-2">
+            <div class="md:col-span-2 reveal reveal-left">
                 <div class="flex items-center gap-2.5 mb-5">
                     <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-primary-500 to-primary-400 flex items-center justify-center">
                         <i class="fas fa-book-open text-white text-sm"></i>
@@ -14,8 +14,8 @@
                 </p>
             </div>
 
-            <!-- Links -->
-            <div>
+                        <!-- Links -->
+            <div class="reveal reveal-up" style="animation-delay: 0.2s">
                 <h3 class="text-white font-bold font-headline text-sm uppercase tracking-widest mb-5">Liên kết</h3>
                 <ul class="space-y-3 text-sm">
                     <li><a href="/" class="hover:text-primary-400 transition-colors duration-300">Trang chủ</a></li>
@@ -24,8 +24,8 @@
                 </ul>
             </div>
 
-            <!-- Contact -->
-            <div>
+                        <!-- Contact -->
+            <div class="reveal reveal-right" style="animation-delay: 0.3s">
                 <h3 class="text-white font-bold font-headline text-sm uppercase tracking-widest mb-5">Liên hệ</h3>
                 <ul class="space-y-3 text-sm">
                     <li class="flex items-center gap-2">
@@ -60,5 +60,95 @@
         </div>
     </div>
 </footer>
+
+<!-- Scroll to Top Button -->
+<button id="scroll-top-btn" title="Lên đầu trang">
+    <i class="fas fa-arrow-up text-sm"></i>
+</button>
+
+<!-- Scroll Reveal Script -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const revealElements = document.querySelectorAll('.reveal');
+    if (!revealElements.length) return;
+
+    // Check for reduced motion preference
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        revealElements.forEach(function(el) { el.classList.add('revealed'); });
+        return;
+    }
+
+    var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                // Add delay from style attribute if present
+                var delay = entry.target.style.animationDelay;
+                if (!delay) {
+                    var inlineDelay = entry.target.getAttribute('style');
+                    if (inlineDelay) {
+                        var match = inlineDelay.match(/animation-delay:\s*([\d.]+s)/);
+                        if (match) {
+                            entry.target.style.animationDelay = match[1];
+                        }
+                    }
+                }
+                entry.target.classList.add('revealed');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.05,
+        rootMargin: '50px 0px -20px 0px'
+    });
+
+
+
+
+
+        revealElements.forEach(function(el) {
+        observer.observe(el);
+    });
+});
+</script>
+
+<!-- Scroll to Top -->
+<script>
+(function() {
+    var btn = document.getElementById('scroll-top-btn');
+    if (!btn) return;
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 400) {
+            btn.classList.add('visible');
+        } else {
+            btn.classList.remove('visible');
+        }
+    });
+    btn.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+})();
+</script>
+
+<!-- Image Skeleton Loading -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.book-cover-img').forEach(function(img) {
+        var skeleton = img.previousElementSibling;
+        if (img.complete) {
+            if (skeleton && skeleton.classList.contains('skeleton')) skeleton.style.display = 'none';
+            img.style.opacity = '1';
+        } else {
+            img.addEventListener('load', function() {
+                if (skeleton && skeleton.classList.contains('skeleton')) skeleton.style.display = 'none';
+                img.style.opacity = '1';
+            });
+            img.addEventListener('error', function() {
+                if (skeleton && skeleton.classList.contains('skeleton')) skeleton.style.display = 'none';
+                img.style.opacity = '1';
+            });
+        }
+    });
+});
+</script>
 </body>
 </html>

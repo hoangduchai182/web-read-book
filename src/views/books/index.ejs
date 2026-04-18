@@ -2,8 +2,8 @@
 <%- include('../partials/navbar') %>
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-    <!-- Page Header -->
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 gap-4">
+        <!-- Page Header -->
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 gap-4 reveal reveal-left">
         <div>
             <p class="text-sm font-bold text-primary-600 uppercase tracking-[0.2em] mb-2">Khám phá</p>
             <h1 class="text-4xl font-extrabold font-headline text-gray-800">
@@ -14,8 +14,8 @@
 
     <%- include('../partials/flash') %>
 
-    <!-- Search & Filter -->
-    <div class="bg-white rounded-2xl shadow-soft p-5 mb-10 border border-gray-100/50">
+        <!-- Search & Filter -->
+    <div class="bg-white rounded-2xl shadow-soft p-5 mb-10 border border-gray-100/50 reveal reveal-up" style="animation-delay: 0.15s">
         <form action="/books" method="GET" class="flex flex-col sm:flex-row gap-4">
             <div class="flex-1">
                 <div class="relative">
@@ -43,11 +43,12 @@
     <% if (books.length > 0) { %>
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
             <% books.forEach(function(book) { %>
-                <a href="/books/<%= book.id %>" class="group">
+                                <a href="/books/<%= book.id %>" class="group reveal reveal-up" style="animation-delay: <%= 0.08 * (books.indexOf(book) % 6) %>s">
                     <div class="card overflow-hidden">
                         <div class="aspect-[3/4] bg-gray-100 relative overflow-hidden">
-                            <% if (book.cover_image) { %>
-                                <img src="<%= book.cover_image %>" alt="<%= book.title %>" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                                                        <% if (book.cover_image) { %>
+                                <div class="skeleton absolute inset-0"></div>
+                                <img src="<%= book.cover_image %>" alt="<%= book.title %>" class="book-cover-img w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" style="opacity:0;transition:opacity 0.4s ease">
                             <% } else { %>
                                 <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary-400 to-primary-600">
                                     <i class="fas fa-book text-white text-4xl"></i>
@@ -105,7 +106,7 @@
             </div>
         <% } %>
     <% } else { %>
-        <div class="text-center py-24">
+                <div class="text-center py-24 reveal reveal-fade">
             <div class="w-20 h-20 bg-gray-100 rounded-3xl flex items-center justify-center mx-auto mb-6">
                 <i class="fas fa-book-open text-gray-300 text-3xl"></i>
             </div>
