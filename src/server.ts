@@ -12,17 +12,15 @@ import authRoutes from "./routes/auth";
 import bookRoutes from "./routes/books";
 import adminRoutes from "./routes/admin";
 
-dotenv.config();
-
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // View engine
 app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
+app.set("views", path.join(process.cwd(), "src", "views"));
 
 // Static files
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(process.cwd(), "src", "public")));
 
 // Body parser
 app.use(express.json());
@@ -45,7 +43,7 @@ app.use(flash());
 
 // Global variables cho views
 app.use((req, res, next) => {
-  res.locals.user = req.session.user || null;
+  res.locals.user = req.session?.user || null;
   res.locals.reqPath = req.path;
   next();
 });
@@ -65,9 +63,17 @@ app.get("/", async (req, res) => {
              ORDER BY b.created_at DESC LIMIT 12`,
     );
 
+    const [popularBooks] = await pool.execute<RowDataPacket[]>(
+      `SELECT b.*, c.name as category_name
+             FROM books b
+             LEFT JOIN categories c ON b.category_id = c.id
+             ORDER BY b.views DESC, b.created_at DESC LIMIT 6`,
+    );
+
     res.render("home", {
       title: "Trang chủ",
       recentBooks,
+      popularBooks,
       user: req.session.user || null,
       success: req.flash("success"),
       error: req.flash("error"),
@@ -77,6 +83,7 @@ app.get("/", async (req, res) => {
     res.render("home", {
       title: "Trang chủ",
       recentBooks: [],
+      popularBooks: [],
       user: req.session.user || null,
       success: req.flash("success"),
       error: req.flash("error"),

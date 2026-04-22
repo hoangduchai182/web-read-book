@@ -68,13 +68,22 @@
                             </div>
                         </div>
                     <% } %>
-                    <div class="flex items-center gap-3">
+                                        <div class="flex items-center gap-3">
                         <div class="w-9 h-9 rounded-xl bg-gray-100 flex items-center justify-center flex-shrink-0">
                             <i class="fas fa-calendar text-gray-400 text-sm"></i>
                         </div>
                         <div>
                             <p class="text-xs text-gray-400 font-medium">Ngày thêm</p>
                             <p class="text-sm font-semibold text-gray-700"><%= new Date(book.created_at).toLocaleDateString('vi-VN') %></p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-xl bg-gray-100 flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-eye text-gray-400 text-sm"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-400 font-medium">Lượt đọc</p>
+                            <p class="text-sm font-semibold text-gray-700"><%= book.views || 0 %></p>
                         </div>
                     </div>
                 </div>

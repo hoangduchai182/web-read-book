@@ -60,7 +60,7 @@
                                     <%= book.file_type %>
                                 </span>
                             </div>
-                            <!-- Hover overlay -->
+                                                        <!-- Hover overlay -->
                             <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-3">
                                 <span class="text-white text-xs font-semibold"><i class="fas fa-book-reader mr-1"></i> Đọc ngay</span>
                             </div>
@@ -68,9 +68,14 @@
                         <div class="p-3">
                             <h3 class="font-bold text-sm text-gray-800 truncate group-hover:text-primary-600 transition-colors" title="<%= book.title %>"><%= book.title %></h3>
                             <p class="text-xs text-gray-400 truncate mt-1"><%= book.author %></p>
-                            <% if (book.category_name) { %>
-                                <span class="inline-block bg-primary-50 text-primary-700 text-xs font-semibold px-2.5 py-0.5 rounded-lg mt-2"><%= book.category_name %></span>
-                            <% } %>
+                            <div class="flex items-center justify-between mt-2">
+                                <% if (book.category_name) { %>
+                                    <span class="inline-block bg-primary-50 text-primary-700 text-xs font-semibold px-2.5 py-0.5 rounded-lg"><%= book.category_name %></span>
+                                <% } else { %>
+                                    <span></span>
+                                <% } %>
+                                <span class="text-xs text-gray-400"><i class="fas fa-eye mr-1"></i> <%= book.views || 0 %></span>
+                            </div>
                         </div>
                     </div>
                 </a>

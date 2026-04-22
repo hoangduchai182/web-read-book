@@ -108,6 +108,62 @@
     </div>
 </section>
 
+<!-- Popular Books (Sách yêu thích) -->
+<% if (typeof popularBooks !== 'undefined' && popularBooks.length > 0) { %>
+<section class="py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4 reveal reveal-up">
+            <div>
+                <p class="text-sm font-bold text-red-500 uppercase tracking-[0.2em] mb-3">
+                    <i class="fas fa-fire mr-1"></i> Đang hot
+                </p>
+                <h2 class="text-4xl font-extrabold font-headline text-gray-800">Sách được yêu thích</h2>
+            </div>
+            <a href="/books" class="text-primary-600 font-bold inline-flex items-center gap-2 hover:gap-3 transition-all duration-300">
+                Khám phá thêm <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+            <% popularBooks.forEach(function(book, index) { %>
+                <a href="/books/<%= book.id %>" class="group reveal reveal-up" style="animation-delay: <%= 0.1 * (index % 6) %>s">
+                    <div class="card overflow-hidden">
+                        <div class="aspect-[3/4] bg-gray-100 relative overflow-hidden">
+                            <% if (book.cover_image) { %>
+                                <div class="skeleton absolute inset-0"></div>
+                                <img src="<%= book.cover_image %>" alt="<%= book.title %>" class="book-cover-img w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" style="opacity:0;transition:opacity 0.4s ease" onload="this.style.opacity=1; this.previousElementSibling.style.display='none';">
+                            <% } else { %>
+                                <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary-400 to-primary-600">
+                                    <i class="fas fa-book text-white text-4xl"></i>
+                                </div>
+                            <% } %>
+                            <div class="absolute top-2 left-2">
+                                <span class="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded shadow-md">
+                                    <i class="fas fa-fire"></i> #<%= index + 1 %>
+                                </span>
+                            </div>
+                            <div class="absolute top-2 right-2">
+                                <span class="bg-white/90 backdrop-blur-sm text-xs font-bold px-2.5 py-1 rounded-lg uppercase
+                                    <%= book.file_type === 'pdf' ? 'text-red-600' : 'text-emerald-600' %>">
+                                    <%= book.file_type %>
+                                </span>
+                            </div>
+                            <!-- Hover overlay -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-3">
+                                <span class="text-white text-xs font-semibold"><i class="fas fa-eye mr-1"></i> <%= book.views || 0 %> lượt đọc</span>
+                            </div>
+                        </div>
+                        <div class="p-3">
+                            <h3 class="font-bold text-sm text-gray-800 truncate group-hover:text-primary-600 transition-colors" title="<%= book.title %>"><%= book.title %></h3>
+                            <p class="text-xs text-gray-400 truncate mt-1"><%= book.author %></p>
+                        </div>
+                    </div>
+                </a>
+            <% }); %>
+        </div>
+    </div>
+</section>
+<% } %>
+
 <!-- Recent Books -->
 <% if (typeof recentBooks !== 'undefined' && recentBooks.length > 0) { %>
 <section class="bg-surface-container-low py-24">
