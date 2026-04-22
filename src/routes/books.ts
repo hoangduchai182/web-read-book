@@ -10,6 +10,7 @@ router.get("/", isAuthenticated, async (req: Request, res: Response) => {
   try {
     const search = (req.query.search as string) || "";
     const categoryId = (req.query.category as string) || "";
+    const sortBy = (req.query.sort as string) || "latest";
     const page = parseInt(req.query.page as string) || 1;
     const limit = 12;
     const offset = (page - 1) * limit;
@@ -39,14 +40,31 @@ router.get("/", isAuthenticated, async (req: Request, res: Response) => {
       countParams.push(categoryId);
     }
 
-    query += " ORDER BY b.created_at DESC LIMIT ? OFFSET ?";
-    params.push(limit, offset);
+    // Xử lý sắp xếp
+    switch (sortBy) {
+      case "name_asc":
+        query += " ORDER BY b.title ASC";
+        break;
+      case "name_desc":
+        query += " ORDER BY b.title DESC";
+        break;
+      case "views":
+        query += " ORDER BY b.views DESC, b.created_at DESC";
+        break;
+      case "latest":
+      default:
+        query += " ORDER BY b.created_at DESC";
+        break;
+    }
+
+    query += ` LIMIT ${limit} OFFSET ${offset}`;
 
     const [books] = await pool.execute<RowDataPacket[]>(query, params);
     const [countResult] = await pool.execute<RowDataPacket[]>(
       countQuery,
       countParams,
     );
+
     const total = countResult[0].total;
     const totalPages = Math.ceil(total / limit);
 
@@ -60,6 +78,7 @@ router.get("/", isAuthenticated, async (req: Request, res: Response) => {
       categories,
       search,
       categoryId,
+      sortBy,
       currentPage: page,
       totalPages,
       user: req.session.user,

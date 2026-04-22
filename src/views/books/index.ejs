@@ -16,7 +16,7 @@
 
         <!-- Search & Filter -->
     <div class="bg-white rounded-2xl shadow-soft p-5 mb-10 border border-gray-100/50 reveal reveal-up" style="animation-delay: 0.15s">
-        <form action="/books" method="GET" class="flex flex-col sm:flex-row gap-4">
+                <form action="/books" method="GET" class="flex flex-col sm:flex-row gap-4">
             <div class="flex-1">
                 <div class="relative">
                     <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400">
@@ -25,7 +25,7 @@
                     <input type="text" name="search" value="<%= search %>" class="input-field pl-11" placeholder="Tìm theo tên sách hoặc tác giả...">
                 </div>
             </div>
-            <div class="sm:w-52">
+            <div class="sm:w-48">
                 <select name="category" class="input-field">
                     <option value="">Tất cả thể loại</option>
                     <% categories.forEach(function(cat) { %>
@@ -33,8 +33,16 @@
                     <% }); %>
                 </select>
             </div>
-            <button type="submit" class="btn-primary">
-                <i class="fas fa-search mr-1.5"></i> Tìm kiếm
+            <div class="sm:w-48">
+                <select name="sort" class="input-field">
+                    <option value="latest" <%= sortBy === 'latest' ? 'selected' : '' %>>Mới nhất</option>
+                    <option value="views" <%= sortBy === 'views' ? 'selected' : '' %>>Nhiều lượt đọc</option>
+                    <option value="name_asc" <%= sortBy === 'name_asc' ? 'selected' : '' %>>Tên (A-Z)</option>
+                    <option value="name_desc" <%= sortBy === 'name_desc' ? 'selected' : '' %>>Tên (Z-A)</option>
+                </select>
+            </div>
+            <button type="submit" class="btn-primary whitespace-nowrap">
+                <i class="fas fa-filter mr-1.5"></i> Lọc & Tìm
             </button>
         </form>
     </div>
@@ -86,15 +94,15 @@
         <% if (totalPages > 1) { %>
             <div class="flex justify-center mt-12">
                 <nav class="inline-flex items-center gap-1.5 bg-white rounded-2xl shadow-soft p-2 border border-gray-100/50">
-                    <% if (currentPage > 1) { %>
-                        <a href="/books?page=<%= currentPage - 1 %>&search=<%= search %>&category=<%= categoryId %>"
+                                        <% if (currentPage > 1) { %>
+                        <a href="/books?page=<%= currentPage - 1 %>&search=<%= search %>&category=<%= categoryId %>&sort=<%= sortBy %>"
                            class="w-10 h-10 flex items-center justify-center rounded-xl text-gray-500 hover:bg-primary-50 hover:text-primary-600 transition-all duration-300">
                             <i class="fas fa-chevron-left text-sm"></i>
                         </a>
                     <% } %>
 
                     <% for (let i = 1; i <= totalPages; i++) { %>
-                        <a href="/books?page=<%= i %>&search=<%= search %>&category=<%= categoryId %>"
+                        <a href="/books?page=<%= i %>&search=<%= search %>&category=<%= categoryId %>&sort=<%= sortBy %>"
                            class="w-10 h-10 flex items-center justify-center rounded-xl text-sm font-semibold transition-all duration-300
                            <%= i === currentPage ? 'bg-gradient-to-r from-primary-600 to-primary-500 text-white shadow-glow' : 'text-gray-600 hover:bg-primary-50 hover:text-primary-600' %>">
                             <%= i %>
@@ -102,7 +110,7 @@
                     <% } %>
 
                     <% if (currentPage < totalPages) { %>
-                        <a href="/books?page=<%= currentPage + 1 %>&search=<%= search %>&category=<%= categoryId %>"
+                        <a href="/books?page=<%= currentPage + 1 %>&search=<%= search %>&category=<%= categoryId %>&sort=<%= sortBy %>"
                            class="w-10 h-10 flex items-center justify-center rounded-xl text-gray-500 hover:bg-primary-50 hover:text-primary-600 transition-all duration-300">
                             <i class="fas fa-chevron-right text-sm"></i>
                         </a>
