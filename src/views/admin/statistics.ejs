@@ -1,0 +1,592 @@
+<%- include('../partials/header') %>
+
+<div class="flex">
+    <%- include('partials/sidebar') %>
+
+    <main class="md:ml-64 flex-1 p-4 md:p-8 min-h-screen bg-surface">
+        <!-- Page Header -->
+        <div class="mb-10">
+            <p class="text-sm font-bold text-primary-600 uppercase tracking-[0.2em] mb-2">Phân tích</p>
+            <h1 class="text-3xl font-extrabold font-headline text-gray-800">Thống kê & Báo cáo</h1>
+        </div>
+
+        <%- include('../partials/flash') %>
+
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
+            <div class="bg-white rounded-2xl shadow-soft p-5 border border-gray-100/50 hover:shadow-soft-lg transition-all duration-500">
+                <div class="flex items-center gap-3">
+                    <div class="w-11 h-11 bg-gradient-to-br from-primary-100 to-primary-50 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-book text-primary-600 text-sm"></i>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-extrabold font-headline text-gray-800"><%= stats.totalBooks %></p>
+                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Tổng sách</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-2xl shadow-soft p-5 border border-gray-100/50 hover:shadow-soft-lg transition-all duration-500">
+                <div class="flex items-center gap-3">
+                    <div class="w-11 h-11 bg-gradient-to-br from-emerald-100 to-emerald-50 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-users text-emerald-600 text-sm"></i>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-extrabold font-headline text-gray-800"><%= stats.totalUsers %></p>
+                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Người dùng</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-2xl shadow-soft p-5 border border-gray-100/50 hover:shadow-soft-lg transition-all duration-500">
+                <div class="flex items-center gap-3">
+                    <div class="w-11 h-11 bg-gradient-to-br from-violet-100 to-violet-50 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-eye text-violet-600 text-sm"></i>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-extrabold font-headline text-gray-800"><%= stats.totalViews %></p>
+                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Lượt xem</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-2xl shadow-soft p-5 border border-gray-100/50 hover:shadow-soft-lg transition-all duration-500">
+                <div class="flex items-center gap-3">
+                    <div class="w-11 h-11 bg-gradient-to-br from-amber-100 to-amber-50 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-book-reader text-amber-600 text-sm"></i>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-extrabold font-headline text-gray-800"><%= stats.totalReading %></p>
+                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Đang đọc</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row 1 -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <!-- Sách theo thể loại -->
+            <div class="bg-white rounded-2xl shadow-soft border border-gray-100/50 overflow-hidden">
+                <div class="p-5 border-b border-gray-100">
+                    <h2 class="font-bold font-headline text-gray-800 flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-xl bg-primary-50 flex items-center justify-center">
+                            <i class="fas fa-chart-pie text-primary-600 text-sm"></i>
+                        </div>
+                        Sách theo thể loại
+                    </h2>
+                </div>
+                <div class="p-6">
+                    <div class="relative" style="height: 300px;">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Định dạng sách (PDF vs EPUB) -->
+            <div class="bg-white rounded-2xl shadow-soft border border-gray-100/50 overflow-hidden">
+                <div class="p-5 border-b border-gray-100">
+                    <h2 class="font-bold font-headline text-gray-800 flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-xl bg-emerald-50 flex items-center justify-center">
+                            <i class="fas fa-file-alt text-emerald-600 text-sm"></i>
+                        </div>
+                        Định dạng sách
+                    </h2>
+                </div>
+                <div class="p-6">
+                    <div class="relative" style="height: 300px;">
+                        <canvas id="formatChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row 2 -->
+        <div class="grid grid-cols-1 gap-8 mb-8">
+            <!-- Sách upload theo tháng -->
+            <div class="bg-white rounded-2xl shadow-soft border border-gray-100/50 overflow-hidden">
+                <div class="p-5 border-b border-gray-100">
+                    <h2 class="font-bold font-headline text-gray-800 flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-xl bg-blue-50 flex items-center justify-center">
+                            <i class="fas fa-chart-line text-blue-600 text-sm"></i>
+                        </div>
+                        Sách upload theo tháng (12 tháng gần nhất)
+                    </h2>
+                </div>
+                <div class="p-6">
+                    <div class="relative" style="height: 320px;">
+                        <canvas id="booksMonthlyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row 3 -->
+        <div class="grid grid-cols-1 gap-8 mb-8">
+            <!-- Người dùng đăng ký theo tháng -->
+            <div class="bg-white rounded-2xl shadow-soft border border-gray-100/50 overflow-hidden">
+                <div class="p-5 border-b border-gray-100">
+                    <h2 class="font-bold font-headline text-gray-800 flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-xl bg-emerald-50 flex items-center justify-center">
+                            <i class="fas fa-user-plus text-emerald-600 text-sm"></i>
+                        </div>
+                        Người dùng đăng ký theo tháng (12 tháng gần nhất)
+                    </h2>
+                </div>
+                <div class="p-6">
+                    <div class="relative" style="height: 320px;">
+                        <canvas id="usersMonthlyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row 4 -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <!-- Top 10 sách xem nhiều nhất -->
+            <div class="bg-white rounded-2xl shadow-soft border border-gray-100/50 overflow-hidden">
+                <div class="p-5 border-b border-gray-100">
+                    <h2 class="font-bold font-headline text-gray-800 flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-xl bg-amber-50 flex items-center justify-center">
+                            <i class="fas fa-trophy text-amber-600 text-sm"></i>
+                        </div>
+                        Top 10 sách xem nhiều nhất
+                    </h2>
+                </div>
+                <div class="p-6">
+                    <div class="relative" style="height: 350px;">
+                        <canvas id="topBooksChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tỉ lệ vai trò người dùng -->
+            <div class="bg-white rounded-2xl shadow-soft border border-gray-100/50 overflow-hidden">
+                <div class="p-5 border-b border-gray-100">
+                    <h2 class="font-bold font-headline text-gray-800 flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-xl bg-violet-50 flex items-center justify-center">
+                            <i class="fas fa-user-shield text-violet-600 text-sm"></i>
+                        </div>
+                        Tỉ lệ vai trò người dùng
+                    </h2>
+                </div>
+                <div class="p-6">
+                    <div class="relative" style="height: 350px;">
+                        <canvas id="roleChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row 5 -->
+        <div class="grid grid-cols-1 gap-8 mb-8">
+            <!-- Top người dùng đọc nhiều nhất -->
+            <div class="bg-white rounded-2xl shadow-soft border border-gray-100/50 overflow-hidden">
+                <div class="p-5 border-b border-gray-100">
+                    <h2 class="font-bold font-headline text-gray-800 flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-xl bg-rose-50 flex items-center justify-center">
+                            <i class="fas fa-medal text-rose-600 text-sm"></i>
+                        </div>
+                        Top 10 người dùng đọc nhiều nhất
+                    </h2>
+                </div>
+                <div class="p-6">
+                    <div class="relative" style="height: 350px;">
+                        <canvas id="topReadersChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+
+<script>
+    // === Dữ liệu từ server ===
+    var categoryData = <%- JSON.stringify(chartData.categories) %>;
+    var formatData = <%- JSON.stringify(chartData.formats) %>;
+    var booksMonthlyData = <%- JSON.stringify(chartData.booksMonthly) %>;
+    var usersMonthlyData = <%- JSON.stringify(chartData.usersMonthly) %>;
+    var topBooksData = <%- JSON.stringify(chartData.topBooks) %>;
+    var roleData = <%- JSON.stringify(chartData.roles) %>;
+    var topReadersData = <%- JSON.stringify(chartData.topReaders) %>;
+
+    // === Bảng màu đẹp ===
+    var palette = [
+        '#6366f1', '#8b5cf6', '#a78bfa', '#c4b5fd',
+        '#818cf8', '#6d28d9', '#7c3aed', '#5b21b6',
+        '#4f46e5', '#4338ca', '#3730a3', '#312e81'
+    ];
+    var paletteLight = [
+        'rgba(99,102,241,0.15)', 'rgba(139,92,246,0.15)', 'rgba(167,139,250,0.15)', 'rgba(196,181,253,0.15)',
+        'rgba(129,140,248,0.15)', 'rgba(109,40,217,0.15)', 'rgba(124,58,237,0.15)', 'rgba(91,33,182,0.15)',
+        'rgba(79,70,229,0.15)', 'rgba(67,56,202,0.15)', 'rgba(55,48,163,0.15)', 'rgba(49,46,129,0.15)'
+    ];
+
+    // === Cấu hình chung ===
+    Chart.defaults.font.family = "'Manrope', 'Inter', sans-serif";
+    Chart.defaults.font.weight = 500;
+    Chart.defaults.color = '#6b7280';
+    Chart.defaults.plugins.legend.labels.usePointStyle = true;
+    Chart.defaults.plugins.legend.labels.padding = 16;
+
+    // =====================================================
+    // 1. BIỂU ĐỒ SÁCH THEO THỂ LOẠI (Doughnut)
+    // =====================================================
+    (function() {
+        var labels = categoryData.map(function(c) { return c.name; });
+        var data = categoryData.map(function(c) { return c.count; });
+
+        new Chart(document.getElementById('categoryChart'), {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: palette.slice(0, labels.length),
+                    borderWidth: 0,
+                    hoverOffset: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '65%',
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { font: { size: 12 } }
+                    },
+                    tooltip: {
+                        backgroundColor: '#1f2937',
+                        titleFont: { weight: 700 },
+                        padding: 12,
+                        cornerRadius: 12,
+                        callbacks: {
+                            label: function(ctx) {
+                                var total = ctx.dataset.data.reduce(function(a, b) { return a + b; }, 0);
+                                var pct = total > 0 ? ((ctx.parsed / total) * 100).toFixed(1) : 0;
+                                return ctx.label + ': ' + ctx.parsed + ' cuốn (' + pct + '%)';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    })();
+
+    // =====================================================
+    // 2. BIỂU ĐỒ ĐỊNH DẠNG SÁCH (Doughnut)
+    // =====================================================
+    (function() {
+        var labels = formatData.map(function(f) { return f.file_type ? f.file_type.toUpperCase() : 'Khác'; });
+        var data = formatData.map(function(f) { return f.count; });
+        var colors = ['#ef4444', '#10b981'];
+
+        new Chart(document.getElementById('formatChart'), {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: colors.slice(0, labels.length),
+                    borderWidth: 0,
+                    hoverOffset: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '65%',
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { font: { size: 12 } }
+                    },
+                    tooltip: {
+                        backgroundColor: '#1f2937',
+                        titleFont: { weight: 700 },
+                        padding: 12,
+                        cornerRadius: 12,
+                        callbacks: {
+                            label: function(ctx) {
+                                var total = ctx.dataset.data.reduce(function(a, b) { return a + b; }, 0);
+                                var pct = total > 0 ? ((ctx.parsed / total) * 100).toFixed(1) : 0;
+                                return ctx.label + ': ' + ctx.parsed + ' cuốn (' + pct + '%)';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    })();
+
+    // =====================================================
+    // 3. BIỂU ĐỒ SÁCH UPLOAD THEO THÁNG (Line)
+    // =====================================================
+    (function() {
+        var labels = booksMonthlyData.map(function(d) { return d.month; });
+        var data = booksMonthlyData.map(function(d) { return d.count; });
+
+        new Chart(document.getElementById('booksMonthlyChart'), {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Số sách upload',
+                    data: data,
+                    borderColor: '#6366f1',
+                    backgroundColor: 'rgba(99,102,241,0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#6366f1',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 5,
+                    pointHoverRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#1f2937',
+                        titleFont: { weight: 700 },
+                        padding: 12,
+                        cornerRadius: 12
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { size: 11 } }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(0,0,0,0.04)' },
+                        ticks: {
+                            font: { size: 11 },
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+    })();
+
+    // =====================================================
+    // 4. BIỂU ĐỒ NGƯỜI DÙNG ĐĂNG KÝ THEO THÁNG (Bar)
+    // =====================================================
+    (function() {
+        var labels = usersMonthlyData.map(function(d) { return d.month; });
+        var data = usersMonthlyData.map(function(d) { return d.count; });
+
+        new Chart(document.getElementById('usersMonthlyChart'), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Người dùng mới',
+                    data: data,
+                    backgroundColor: 'rgba(16,185,129,0.8)',
+                    hoverBackgroundColor: 'rgba(16,185,129,1)',
+                    borderRadius: 8,
+                    borderSkipped: false,
+                    barThickness: 32
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#1f2937',
+                        titleFont: { weight: 700 },
+                        padding: 12,
+                        cornerRadius: 12
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { size: 11 } }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(0,0,0,0.04)' },
+                        ticks: {
+                            font: { size: 11 },
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+    })();
+
+    // =====================================================
+    // 5. TOP 10 SÁCH XEM NHIỀU NHẤT (Horizontal Bar)
+    // =====================================================
+    (function() {
+        var labels = topBooksData.map(function(b) {
+            return b.title.length > 30 ? b.title.substring(0, 30) + '...' : b.title;
+        });
+        var data = topBooksData.map(function(b) { return b.views; });
+
+        new Chart(document.getElementById('topBooksChart'), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Lượt xem',
+                    data: data,
+                    backgroundColor: palette.slice(0, labels.length),
+                    borderRadius: 6,
+                    borderSkipped: false,
+                    barThickness: 22
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#1f2937',
+                        titleFont: { weight: 700 },
+                        padding: 12,
+                        cornerRadius: 12,
+                        callbacks: {
+                            title: function(items) {
+                                var idx = items[0].dataIndex;
+                                return topBooksData[idx].title;
+                            },
+                            label: function(ctx) {
+                                return ctx.parsed.x + ' lượt xem';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(0,0,0,0.04)' },
+                        ticks: { font: { size: 11 }, stepSize: 1 }
+                    },
+                    y: {
+                        grid: { display: false },
+                        ticks: { font: { size: 11 } }
+                    }
+                }
+            }
+        });
+    })();
+
+    // =====================================================
+    // 6. TỈ LỆ VAI TRÒ NGƯỜI DÙNG (Doughnut)
+    // =====================================================
+    (function() {
+        var labels = roleData.map(function(r) { return r.role === 'admin' ? '👑 Admin' : '👤 User'; });
+        var data = roleData.map(function(r) { return r.count; });
+        var colors = ['#ef4444', '#6366f1'];
+
+        new Chart(document.getElementById('roleChart'), {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: colors.slice(0, labels.length),
+                    borderWidth: 0,
+                    hoverOffset: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '65%',
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { font: { size: 13, weight: 600 } }
+                    },
+                    tooltip: {
+                        backgroundColor: '#1f2937',
+                        titleFont: { weight: 700 },
+                        padding: 12,
+                        cornerRadius: 12,
+                        callbacks: {
+                            label: function(ctx) {
+                                var total = ctx.dataset.data.reduce(function(a, b) { return a + b; }, 0);
+                                var pct = total > 0 ? ((ctx.parsed / total) * 100).toFixed(1) : 0;
+                                return ctx.label + ': ' + ctx.parsed + ' người (' + pct + '%)';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    })();
+
+    // =====================================================
+    // 7. TOP 10 NGƯỜI DÙNG ĐỌC NHIỀU NHẤT (Bar)
+    // =====================================================
+    (function() {
+        var labels = topReadersData.map(function(r) { return r.full_name; });
+        var data = topReadersData.map(function(r) { return r.books_read; });
+
+        new Chart(document.getElementById('topReadersChart'), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Số sách đã đọc',
+                    data: data,
+                    backgroundColor: 'rgba(244,63,94,0.8)',
+                    hoverBackgroundColor: 'rgba(244,63,94,1)',
+                    borderRadius: 8,
+                    borderSkipped: false,
+                    barThickness: 32
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#1f2937',
+                        titleFont: { weight: 700 },
+                        padding: 12,
+                        cornerRadius: 12,
+                        callbacks: {
+                            label: function(ctx) {
+                                return ctx.parsed.y + ' cuốn sách';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { size: 11 } }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(0,0,0,0.04)' },
+                        ticks: {
+                            font: { size: 11 },
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+    })();
+</script>
+
+<%- include('partials/footer') %>

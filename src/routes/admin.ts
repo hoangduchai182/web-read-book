@@ -49,6 +49,137 @@ router.get("/", async (req: Request, res: Response) => {
   }
 });
 
+// ==================== THỐNG KÊ & BÁO CÁO ====================
+
+// GET /admin/statistics - Trang thống kê
+router.get("/statistics", async (req: Request, res: Response) => {
+  try {
+    // --- Tổng quan ---
+    const [totalBooks] = await pool.execute<RowDataPacket[]>(
+      "SELECT COUNT(*) as count FROM books",
+    );
+    const [totalUsers] = await pool.execute<RowDataPacket[]>(
+      "SELECT COUNT(*) as count FROM users",
+    );
+    const [totalViews] = await pool.execute<RowDataPacket[]>(
+      "SELECT COALESCE(SUM(views), 0) as count FROM books",
+    );
+    const [totalReading] = await pool.execute<RowDataPacket[]>(
+      "SELECT COUNT(DISTINCT CONCAT(user_id, '-', book_id)) as count FROM reading_progress",
+    );
+
+    // --- 1. Sách theo thể loại ---
+    const [categories] = await pool.execute<RowDataPacket[]>(
+      `SELECT c.name, COUNT(b.id) as count
+       FROM categories c
+       LEFT JOIN books b ON b.category_id = c.id
+       GROUP BY c.id, c.name
+       ORDER BY count DESC`,
+    );
+
+    // --- 2. Sách theo định dạng ---
+    const [formats] = await pool.execute<RowDataPacket[]>(
+      `SELECT file_type, COUNT(*) as count
+       FROM books
+       GROUP BY file_type
+       ORDER BY count DESC`,
+    );
+
+    // --- 3. Sách upload theo tháng (12 tháng gần nhất) ---
+    const [booksMonthly] = await pool.execute<RowDataPacket[]>(
+      `SELECT DATE_FORMAT(m.month_date, '%m/%Y') as month, COALESCE(cnt, 0) as count
+       FROM (
+         SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL n MONTH), '%Y-%m-01') as month_date
+         FROM (
+           SELECT 0 as n UNION SELECT 1 UNION SELECT 2 UNION SELECT 3
+           UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7
+           UNION SELECT 8 UNION SELECT 9 UNION SELECT 10 UNION SELECT 11
+         ) nums
+       ) m
+       LEFT JOIN (
+         SELECT DATE_FORMAT(created_at, '%Y-%m-01') as month_key, COUNT(*) as cnt
+         FROM books
+         WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 12 MONTH)
+         GROUP BY month_key
+       ) b ON m.month_date = b.month_key
+       ORDER BY m.month_date ASC`,
+    );
+
+    // --- 4. Người dùng đăng ký theo tháng (12 tháng gần nhất) ---
+    const [usersMonthly] = await pool.execute<RowDataPacket[]>(
+      `SELECT DATE_FORMAT(m.month_date, '%m/%Y') as month, COALESCE(cnt, 0) as count
+       FROM (
+         SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL n MONTH), '%Y-%m-01') as month_date
+         FROM (
+           SELECT 0 as n UNION SELECT 1 UNION SELECT 2 UNION SELECT 3
+           UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7
+           UNION SELECT 8 UNION SELECT 9 UNION SELECT 10 UNION SELECT 11
+         ) nums
+       ) m
+       LEFT JOIN (
+         SELECT DATE_FORMAT(created_at, '%Y-%m-01') as month_key, COUNT(*) as cnt
+         FROM users
+         WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 12 MONTH)
+         GROUP BY month_key
+       ) u ON m.month_date = u.month_key
+       ORDER BY m.month_date ASC`,
+    );
+
+    // --- 5. Top 10 sách xem nhiều nhất ---
+    const [topBooks] = await pool.execute<RowDataPacket[]>(
+      `SELECT title, views
+       FROM books
+       ORDER BY views DESC
+       LIMIT 10`,
+    );
+
+    // --- 6. Tỉ lệ vai trò người dùng ---
+    const [roles] = await pool.execute<RowDataPacket[]>(
+      `SELECT role, COUNT(*) as count
+       FROM users
+       GROUP BY role
+       ORDER BY role ASC`,
+    );
+
+    // --- 7. Top 10 người dùng đọc nhiều nhất ---
+    const [topReaders] = await pool.execute<RowDataPacket[]>(
+      `SELECT u.full_name, COUNT(rp.book_id) as books_read
+       FROM reading_progress rp
+       JOIN users u ON rp.user_id = u.id
+       GROUP BY rp.user_id, u.full_name
+       ORDER BY books_read DESC
+       LIMIT 10`,
+    );
+
+    res.render("admin/statistics", {
+      title: "Thống kê & Báo cáo",
+      active: "statistics",
+      stats: {
+        totalBooks: totalBooks[0].count,
+        totalUsers: totalUsers[0].count,
+        totalViews: totalViews[0].count,
+        totalReading: totalReading[0].count,
+      },
+      chartData: {
+        categories,
+        formats,
+        booksMonthly,
+        usersMonthly,
+        topBooks,
+        roles,
+        topReaders,
+      },
+      user: req.session.user,
+      success: req.flash("success"),
+      error: req.flash("error"),
+    });
+  } catch (error) {
+    console.error("Admin statistics error:", error);
+    req.flash("error", "Đã xảy ra lỗi khi tải trang thống kê");
+    res.redirect("/admin");
+  }
+});
+
 // ==================== QUẢN LÝ SÁCH ====================
 
 // GET /admin/books - Danh sách sách
